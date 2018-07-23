@@ -7,7 +7,7 @@
     "dev": "npm start",
     "build": "babel src -d dist --presets env",
     "serve": "node dist/index.js",
-    "fake": "babel-node src/faker/index.js"
+    "fake": "babel-node src/test.js"
   },
   "author": "",
   "license": "MIT",

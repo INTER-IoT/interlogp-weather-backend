@@ -6,7 +6,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 
 // const pubsub = new PubSub();
 
-import { Ports, Stations } from './connectors';
+import { Ports, WeatherStations, WeatherMeasurements } from './fake-connector';
 
 const typeDefs = [`
 
@@ -19,17 +19,33 @@ const typeDefs = [`
     id: Int!
     name: String!
     position: Position!
+    weatherStations: [WeatherStation]
   }
 
-  type Station {
+  type WeatherStation {
     id: Int!
     position: Position!
     port: Port!
+    weatherMeasurements: [WeatherMeasurement]
+  }
+
+  type WeatherMeasurement {
+    id: Int!
+    date: String!
+    windSpeed: Float!
+    precipitation: Float!
+    solarRadiation: Float!
+    pressure: Float!
+    humidity: Float!
+    seaTemperature: Float!
+    averageTemperature: Float!
+    windDirection: Float
   }
 
   type Query {
     ports: [Port]
-    stations(portId: Int): [Station]
+    weatherStations(portId: Int): [WeatherStation]
+    weatherMeasurements(stationId: Int): [WeatherMeasurement]
   }
 
   schema {
@@ -43,9 +59,13 @@ const resolvers = {
     ports(root, args, context) {
       return Ports.ports();
     },
-    stations(root, { portId }, context) {
-      if (portId !== undefined) return Stations.stationsByPort(portId);
-      return Stations.stations();
+    weatherStations(root, { portId }, context) {
+      if (portId !== undefined) return WeatherStations.weatherStationsByPort(portId);
+      return WeatherStations.weatherStations();
+    },
+    weatherMeasurements(root, { stationId }, context) {
+      if (stationId !== undefined) return WeatherMeasurements.weatherMeasurementsByStation(stationId);
+      return WeatherMeasurements.weatherMeasurements();
     },
   },
 };
