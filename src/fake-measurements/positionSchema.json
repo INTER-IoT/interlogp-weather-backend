@@ -1,0 +1,17 @@
+{
+  "id": "position",
+  "type": "object",
+  "properties": {
+    "lat": {
+      "type": "number",
+      "minimum": 39.418257,
+      "maximum": 39.441116
+    },
+    "lon": {
+      "type": "number",
+      "minimum": -0.336448,
+      "maximum": -0.302224
+    }
+  },
+  "required": ["lat", "lon"]
+}

@@ -1,63 +1,21 @@
-import _ from 'lodash';
-// Fake word generator
-import faker from 'faker';
 
-// Let's generate some tags
-let id = 0;
-const tags = [];
+const Ports = {};
 
-function addTag(type, label) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      id += 1;
-      const t = {
-        id,
-        label,
-        type,
-      };
-      tags.push(t);
-      resolve(t);
-    }, 2000);
-  });
-}
+Ports.ports = () => [
+  { id: 1, name: 'Valencia', position: { lat: 0, lon: 0 } },
+  { id: 2, name: 'Sagunto', position: { lat: 0, lon: 0 } },
+  { id: 3, name: 'Gandia', position: { lat: 0, lon: 0 } },
+];
 
+const Stations = {};
 
-for (let i = 0; i < 42; i += 1) {
-  if (Math.random() < 0.5) {
-    addTag('City', faker.address.city());
-  } else {
-    addTag('Company', faker.company.companyName());
-  }
-}
+Stations.stations = () => [
+  { id: 1, port: Ports.ports().find(port => port.id === 1), position: { lat: 0, lon: 0 } },
+  { id: 2, port: Ports.ports().find(port => port.id === 1), position: { lat: 0, lon: 0 } },
+  { id: 3, port: Ports.ports().find(port => port.id === 2), position: { lat: 0, lon: 0 } },
+];
 
+Stations.stationsByPort = portId => Stations.stations().filter(station => station.port.id === portId);
 
-function fakeDelay(cb) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(cb());
-    }, 2000);
-  });
-}
-
-export default {
-  getTags(type) {
-    return fakeDelay(() => _.filter(tags, tag => tag.type === type));
-  },
-  getTagsPage(page, pageSize) {
-    return fakeDelay(() => {
-      const start = page * pageSize;
-      const end = start + pageSize;
-      return {
-        tags: tags.slice(start, end),
-        hasMore: end < tags.length,
-      };
-    });
-  },
-  getRandomTag() {
-    return tags[Math.round(Math.random() * (tags.length - 1))];
-  },
-  getLastTag() {
-    return tags[tags.length - 1];
-  },
-  addTag,
-};
+/* eslint import/prefer-default-export: off */
+export { Ports, Stations };

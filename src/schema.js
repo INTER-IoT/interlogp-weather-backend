@@ -2,85 +2,50 @@
 
 import { makeExecutableSchema } from 'graphql-tools';
 
-import { PubSub, withFilter } from 'graphql-subscriptions';
+// import { PubSub, withFilter } from 'graphql-subscriptions';
 
-import Tags from './connectors';
+// const pubsub = new PubSub();
 
-const pubsub = new PubSub();
-
-const TAGS_CHANGED_TOPIC = 'tags_changed';
+import { Ports, Stations } from './connectors';
 
 const typeDefs = [`
-  type Tag {
-    id: Int
-    label: String
-    type: String
+
+  type Position {
+    lat: Float
+    lon: Float
   }
 
-  type TagsPage {
-    tags: [Tag]
-    hasMore: Boolean
+  type Port {
+    id: Int!
+    name: String!
+    position: Position!
+  }
+
+  type Station {
+    id: Int!
+    position: Position!
+    port: Port!
   }
 
   type Query {
-    hello: String
-    ping(message: String!): String
-    tags(type: String!): [Tag]
-    tagsPage(page: Int!, size: Int!): TagsPage
-    randomTag: Tag
-    lastTag: Tag
-  }
-
-  type Mutation {
-    addTag(type: String!, label: String!): Tag
-  }
-
-  type Subscription {
-    tagAdded(type: String!): Tag
+    ports: [Port]
+    stations(portId: Int): [Station]
   }
 
   schema {
     query: Query
-    mutation: Mutation
-    subscription: Subscription
   }
+
 `];
 
 const resolvers = {
   Query: {
-    hello(root, args, context) {
-      return 'Hello world!';
+    ports(root, args, context) {
+      return Ports.ports();
     },
-    ping(root, { message }, context) {
-      return `Answering ${message}`;
-    },
-    tags(root, { type }, context) {
-      return Tags.getTags(type);
-    },
-    tagsPage(root, { page, size }, context) {
-      return Tags.getTagsPage(page, size);
-    },
-    randomTag(root, args, context) {
-      return Tags.getRandomTag();
-    },
-    lastTag(root, args, context) {
-      return Tags.getLastTag();
-    },
-  },
-  Mutation: {
-    addTag: async (root, { type, label }, context) => {
-      console.log(`adding ${type} tag '${label}'`);
-      const newTag = await Tags.addTag(type, label);
-      pubsub.publish(TAGS_CHANGED_TOPIC, { tagAdded: newTag });
-      return newTag;
-    },
-  },
-  Subscription: {
-    tagAdded: {
-      subscribe: withFilter(
-        () => pubsub.asyncIterator(TAGS_CHANGED_TOPIC),
-        (payload, variables) => payload.tagAdded.type === variables.type,
-      ),
+    stations(root, { portId }, context) {
+      if (portId !== undefined) return Stations.stationsByPort(portId);
+      return Stations.stations();
     },
   },
 };
