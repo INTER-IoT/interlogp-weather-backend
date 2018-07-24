@@ -56,9 +56,16 @@ WeatherMeasurements.weatherMeasurementsByStation = async (weatherStationId) => {
 };
 
 
-WeatherMeasurements.lastMeasurement = async (weatherStationId) => {
-  const measurements = await WeatherMeasurements.weatherMeasurementsByStation(weatherStationId);
-  return measurements[0];
+WeatherMeasurements.lastMeasurementByStation = async (weatherStationId) => {
+  const weatherMeasurements = await WeatherMeasurements.weatherMeasurementsByStation(weatherStationId);
+  return weatherMeasurements.sort((a, b) => b.date - a.date)[0];
+};
+
+WeatherMeasurements.lastMeasurementsByPort = async (portId) => {
+  const weatherStations = await WeatherStations.weatherStationsByPort(portId);
+  const measurements = await Promise.all(weatherStations.map(weatherStation => WeatherMeasurements.lastMeasurementByStation(weatherStation.id)));
+  console.log(measurements);
+  return measurements;
 };
 
 

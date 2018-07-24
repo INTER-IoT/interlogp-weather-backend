@@ -46,7 +46,8 @@ const typeDefs = [`
     ports: [Port]
     weatherStations(portId: Int): [WeatherStation]
     weatherMeasurements(weatherStationId: Int): [WeatherMeasurement]
-    lastMeasurement(weatherStationId: Int!): WeatherMeasurement
+    lastMeasurementByStation(weatherStationId: Int!): WeatherMeasurement
+    lastMeasurementsByPort(portId: Int!): [WeatherMeasurement]
   }
 
   schema {
@@ -71,8 +72,11 @@ const resolvers = {
       if (weatherStationId !== undefined) return WeatherMeasurements.weatherMeasurementsByStation(weatherStationId);
       return WeatherMeasurements.weatherMeasurements();
     },
-    lastMeasurement(root, { weatherStationId }, context) {
-      return WeatherMeasurements.lastMeasurement(weatherStationId);
+    lastMeasurementByStation(root, { weatherStationId }, context) {
+      return WeatherMeasurements.lastMeasurementByStation(weatherStationId);
+    },
+    lastMeasurementsByPort(root, { portId }, context) {
+      return WeatherMeasurements.lastMeasurementsByPort(portId);
     },
   },
 };
