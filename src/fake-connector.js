@@ -1,6 +1,6 @@
-import fakeGenerator from './fake-measurements';
+import _fakeGenerator from './fake-measurements';
 
-const fakePorts = fakeGenerator.generate(10, 100);
+let fakePorts;
 
 const Ports = {};
 
@@ -19,14 +19,25 @@ WeatherStations.weatherStationsByPort = portId => fakePorts
 const WeatherMeasurements = {};
 
 WeatherMeasurements.weatherMeasurements = () => WeatherStations.weatherStations()
-  .reduce((weatherMeasurements, station) => {
-    console.log(station);
-    return [...weatherMeasurements, ...station.weatherMeasurements];
-  }, []);
+  .reduce((weatherMeasurements, station) => [...weatherMeasurements, ...station.weatherMeasurements], []);
 
 WeatherMeasurements.weatherMeasurementsByStation = stationId => WeatherStations.weatherStations()
-.find(station => station.id === stationId).weatherMeasurements;
+  .find(station => station.id === stationId).weatherMeasurements;
 
+const fakeGenerator = (numStations, numMeasurements) => {
+  fakePorts = _fakeGenerator.generate(numStations, numMeasurements);
+};
 
-/* eslint import/prefer-default-export: off */
-export { Ports, WeatherStations };
+export {
+  fakeGenerator,
+  Ports,
+  WeatherStations,
+  WeatherMeasurements,
+};
+
+export default {
+  fakeGenerator,
+  Ports,
+  WeatherStations,
+  WeatherMeasurements,
+};

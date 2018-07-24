@@ -10,8 +10,13 @@ import { SubscriptionServer } from 'subscriptions-transport-ws';
 
 import schema from './schema';
 
-const PORT = 3020;
-const SUBSCRIPTIONS_PATH = '/subscriptions';
+import config from './config';
+
+import { fakeGenerator } from './fake-connector';
+
+fakeGenerator(10, 100);
+
+const PORT = config.server.port;
 
 const app = express();
 
@@ -22,15 +27,17 @@ app.use(bodyParser.json());
 
 app.use('/graphql', graphqlExpress({ schema }));
 
-app.use('/graphiql', graphiqlExpress({
-  endpointURL: '/graphql',
-}));
+if (config.dev) {
+  app.use('/graphiql', graphiqlExpress({
+    endpointURL: '/graphql',
+  }));
+}
 
 const server = createServer(app);
 
 server.listen(PORT, () => {
   console.log(`API Server is now running on http://localhost:${PORT}/graphql`);
-  console.log(`API Subscriptions server is now running on ws://localhost:${PORT}${SUBSCRIPTIONS_PATH}`);
+  console.log(`API Subscriptions server is now running on ws://localhost:${PORT}/subscriptions`);
 });
 
 // Subs
@@ -42,6 +49,6 @@ SubscriptionServer.create(
   },
   {
     server,
-    path: SUBSCRIPTIONS_PATH,
+    path: '/subscriptions',
   },
 );

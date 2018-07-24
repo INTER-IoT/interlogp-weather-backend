@@ -6,7 +6,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 
 // const pubsub = new PubSub();
 
-import { Ports, WeatherStations, WeatherMeasurements } from './fake-connector';
+import { Ports, WeatherStations, WeatherMeasurements } from './mongo-connector';
 
 const typeDefs = [`
 
@@ -19,14 +19,12 @@ const typeDefs = [`
     id: Int!
     name: String!
     position: Position!
-    weatherStations: [WeatherStation]
   }
 
   type WeatherStation {
     id: Int!
     position: Position!
     port: Port!
-    weatherMeasurements: [WeatherMeasurement]
   }
 
   type WeatherMeasurement {
@@ -39,13 +37,14 @@ const typeDefs = [`
     humidity: Float!
     seaTemperature: Float!
     averageTemperature: Float!
-    windDirection: Float
+    windDirection: Float!
+    weatherStation: WeatherStation!
   }
 
   type Query {
     ports: [Port]
     weatherStations(portId: Int): [WeatherStation]
-    weatherMeasurements(stationId: Int): [WeatherMeasurement]
+    weatherMeasurements(weatherStationId: Int): [WeatherMeasurement]
   }
 
   schema {
@@ -63,8 +62,8 @@ const resolvers = {
       if (portId !== undefined) return WeatherStations.weatherStationsByPort(portId);
       return WeatherStations.weatherStations();
     },
-    weatherMeasurements(root, { stationId }, context) {
-      if (stationId !== undefined) return WeatherMeasurements.weatherMeasurementsByStation(stationId);
+    weatherMeasurements(root, { weatherStationId }, context) {
+      if (weatherStationId !== undefined) return WeatherMeasurements.weatherMeasurementsByStation(weatherStationId);
       return WeatherMeasurements.weatherMeasurements();
     },
   },
