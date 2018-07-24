@@ -42,9 +42,11 @@ const typeDefs = [`
   }
 
   type Query {
+    hello: String
     ports: [Port]
     weatherStations(portId: Int): [WeatherStation]
     weatherMeasurements(weatherStationId: Int): [WeatherMeasurement]
+    lastMeasurement(weatherStationId: Int!): WeatherMeasurement
   }
 
   schema {
@@ -55,6 +57,9 @@ const typeDefs = [`
 
 const resolvers = {
   Query: {
+    hello(root, args, context) {
+      return 'Hello World';
+    },
     ports(root, args, context) {
       return Ports.ports();
     },
@@ -65,6 +70,9 @@ const resolvers = {
     weatherMeasurements(root, { weatherStationId }, context) {
       if (weatherStationId !== undefined) return WeatherMeasurements.weatherMeasurementsByStation(weatherStationId);
       return WeatherMeasurements.weatherMeasurements();
+    },
+    lastMeasurement(root, { weatherStationId }, context) {
+      return WeatherMeasurements.lastMeasurement(weatherStationId);
     },
   },
 };

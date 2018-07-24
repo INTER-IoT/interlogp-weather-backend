@@ -55,6 +55,13 @@ WeatherMeasurements.weatherMeasurementsByStation = async (weatherStationId) => {
   return weatherMeasurements.filter(weatherMeasurement => weatherMeasurement.weatherStation !== null);
 };
 
+
+WeatherMeasurements.lastMeasurement = async (weatherStationId) => {
+  const measurements = await WeatherMeasurements.weatherMeasurementsByStation(weatherStationId);
+  return measurements[0];
+};
+
+
 export {
   Ports,
   WeatherStations,
