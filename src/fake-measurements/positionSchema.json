@@ -2,16 +2,16 @@
   "id": "position",
   "type": "object",
   "properties": {
-    "lat": {
+    "latShift": {
       "type": "number",
-      "minimum": 39.418257,
-      "maximum": 39.441116
+      "minimum": -0.01,
+      "maximum": 0.01
     },
-    "lon": {
+    "lonShift": {
       "type": "number",
-      "minimum": -0.336448,
-      "maximum": -0.302224
+      "minimum": -0.015,
+      "maximum": 0.015
     }
   },
-  "required": ["lat", "lon"]
+  "required": ["latShift", "lonShift"]
 }

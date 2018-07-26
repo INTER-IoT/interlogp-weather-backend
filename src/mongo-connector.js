@@ -64,7 +64,6 @@ WeatherMeasurements.lastMeasurementByStation = async (weatherStationId) => {
 WeatherMeasurements.lastMeasurementsByPort = async (portId) => {
   const weatherStations = await WeatherStations.weatherStationsByPort(portId);
   const measurements = await Promise.all(weatherStations.map(weatherStation => WeatherMeasurements.lastMeasurementByStation(weatherStation.id)));
-  console.log(measurements);
   return measurements;
 };
 

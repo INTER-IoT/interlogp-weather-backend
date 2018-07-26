@@ -56,7 +56,7 @@ export default {
     const weatherStations = jsf(weatherStationCollection(numStations * ports.length), refs);
     addIncrementalId(weatherStations);
 
-    const weatherMeasurements = jsf(weatherMeasurementCollection(numMeasurements), refs);
+    const weatherMeasurements = jsf(weatherMeasurementCollection(numMeasurements * numStations * ports.length), refs);
     weatherMeasurements.sort((a, b) => a.date - b.date);
     addIncrementalId(weatherMeasurements);
     shuffle(weatherMeasurements);
@@ -64,8 +64,12 @@ export default {
     ports.forEach((port) => {
       port.weatherStations = weatherStations.splice(0, numStations);
       port.weatherStations.forEach((weatherStation) => {
+        weatherStation.position.lat = port.position.lat + weatherStation.position.latShift;
+        weatherStation.position.lon = port.position.lon + weatherStation.position.lonShift;
+        delete weatherStation.position.latShift;
+        delete weatherStation.position.lonShift;
         weatherStation.port = port;
-        weatherStation.weatherMeasurements = weatherMeasurements.splice(0, numStations);
+        weatherStation.weatherMeasurements = weatherMeasurements.splice(0, numMeasurements);
         weatherStation.weatherMeasurements.sort((a, b) => a.id - b.id);
         weatherStation.weatherMeasurements.forEach((weatherMeasurement) => {
           weatherMeasurement.weatherStation = weatherStation;
