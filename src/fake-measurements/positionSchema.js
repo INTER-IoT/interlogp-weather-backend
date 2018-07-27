@@ -1,4 +1,5 @@
-{
+/* eslint-disable */
+export default {
   "id": "position",
   "type": "object",
   "properties": {

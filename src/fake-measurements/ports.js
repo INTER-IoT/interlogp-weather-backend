@@ -1,4 +1,5 @@
-[
+/* eslint-disable */
+export default [
   {
     "id": 1,
     "name": "Valencia",

@@ -1,4 +1,5 @@
-{
+/* eslint-disable */
+export default {
   "id": "weatherMeasurement",
   "type": "object",
   "properties": {

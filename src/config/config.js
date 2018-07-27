@@ -1,7 +1,8 @@
-{
+/* eslint-disable */
+export default {
   "prod": {
     "mongo": {
-      "host": "127.0.0.1",
+      "host": "enolgor.dcom.upv.es",
       "port": "27017",
       "database": "environment"
     },
