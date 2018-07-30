@@ -12,10 +12,6 @@ import schema from './schema';
 
 import config from './config';
 
-import { fakeGenerator } from './fake-connector';
-
-fakeGenerator(10, 100);
-
 const PORT = config.server.port;
 
 const app = express();
@@ -24,6 +20,8 @@ app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use('/', express.static('static'));
 
 app.use('/graphql', graphqlExpress({ schema }));
 
