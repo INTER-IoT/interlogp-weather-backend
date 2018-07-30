@@ -3,12 +3,18 @@ import config from './config';
 
 import { PortModel, WeatherStationModel, WeatherMeasurementModel } from './models';
 
-const user = process.env.MONGODB_USER;
-const pwd = process.env.MONGODB_PASSWORD;
+const mongo = {};
 
-const userString = user ? pwd ? `${user}:${pwd}@` : `${user}@` : ''; // eslint-disable-line no-nested-ternary
+mongo.user = process.env.MONGO_USER;
+mongo.pwd = process.env.MONGO_PASSWORD;
 
-mongoose.connect(`mongodb://${userString}${config.mongo.host}:${config.mongo.port}/${config.mongo.database}`, {
+mongo.userString = mongo.user ? mongo.pwd ? `${mongo.user}:${mongo.pwd}@` : `${mongo.user}@` : ''; // eslint-disable-line no-nested-ternary
+
+mongo.host = process.env.MONGO_HOST || config.mongo.host;
+mongo.port = process.env.MONGO_PORT || config.mongo.port;
+mongo.database = process.env.MONGO_DATABASE || config.mongo.database;
+
+mongoose.connect(`mongodb://${mongo.userString}${mongo.host}:${mongo.port}/${mongo.database}`, {
   useNewUrlParser: true,
 });
 
