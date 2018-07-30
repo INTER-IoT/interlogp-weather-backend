@@ -21,7 +21,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/', express.static('static'));
+app.use('/', express.static(`${__dirname}/static`));
 
 app.use('/graphql', graphqlExpress({ schema }));
 
