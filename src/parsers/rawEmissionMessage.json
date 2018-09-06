@@ -1,0 +1,136 @@
+{
+  "@graph": [
+    {
+      "@graph": [
+        {
+          "@id": "InterIoT:message/meta/a5cf495e-ebc5-4524-9bc2-c973551ccd76",
+          "@type": [
+            "Observation",
+            "meta"
+          ],
+          "SenderPlatformId": {
+            "@id": "http://www.inter-iot.eu/wso2port"
+          },
+          "conversationID": "conv2179ae6c-62e3-46b8-bdcd-2c305126c57c",
+          "dateTimeStamp": "2018-07-18T11:36:27.809Z",
+          "messageID": "msga6747076-ed52-4ed6-8bc1-a6dab2b300e8"
+        }
+      ],
+      "@id": "InterIoT:message/metadata"
+    },
+    {
+      "@graph": [
+        {
+          "@id": "_:b0",
+          "@type": [
+            "sosa:Result",
+            "InterIoT:LogVPmod#Emission_NOX"
+          ],
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#int",
+            "@value": "18"
+          }
+        },
+        {
+          "@id": "_:b1",
+          "@type": [
+            "sosa:Result",
+            "InterIoT:LogVPmod#ParticlesConcentration"
+          ],
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "7.9"
+          }
+        },
+        {
+          "@id": "_:b2",
+          "@type": [
+            "sosa:Result",
+            "InterIoT:LogVPmod#Emission_SO2"
+          ],
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#int",
+            "@value": "10"
+          }
+        },
+        {
+          "@id": "_:b3",
+          "@type": [
+            "sosa:Result",
+            "InterIoT:LogVPmod#Emission_NO2"
+          ],
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#int",
+            "@value": "10"
+          }
+        },
+        {
+          "@id": "_:b4",
+          "@type": [
+            "sosa:Result",
+            "InterIoT:LogVPmod#Emission_NO"
+          ],
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#int",
+            "@value": "12"
+          }
+        },
+        {
+          "@id": "_:b5",
+          "@type": [
+            "InterIoT:LogVPmod#Emission_CO",
+            "sosa:Result"
+          ],
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "0.2"
+          }
+        },
+        {
+          "@id": "http://www.inter-iot.eu/wso2port/emission/cabins/4/3178660",
+          "@type": [
+            "sosa:Observation",
+            "InterIoT:LogVPmod#EmmissionMeasurement"
+          ],
+          "sosa:hasResult": [
+            {
+              "@id": "_:b0"
+            },
+            {
+              "@id": "_:b1"
+            },
+            {
+              "@id": "_:b2"
+            },
+            {
+              "@id": "_:b3"
+            },
+            {
+              "@id": "_:b4"
+            },
+            {
+              "@id": "_:b5"
+            }
+          ],
+          "sosa:madeBySensor": {
+            "@id": "http://www.inter-iot.eu/wso2port/emission/cabins/4"
+          },
+          "sosa:resultTime": {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "2018-07-18T02:00:17.000+02:00"
+          }
+        }
+      ],
+      "@id": "InterIoT:message/payload"
+    }
+  ],
+  "@context": {
+    "@vocab": "http://inter-iot.eu/message/",
+    "iiotex": "http://inter-iot.eu/GOIoTPex#",
+    "geosparql": "http://www.opengis.net/ont/geosparql#",
+    "iiot": "http://inter-iot.eu/GOIoTP#",
+    "InterIoT": "http://inter-iot.eu/",
+    "ssn": "http://www.w3.org/ns/ssn/",
+    "sosa": "http://www.w3.org/ns/sosa/"
+  }
+}
