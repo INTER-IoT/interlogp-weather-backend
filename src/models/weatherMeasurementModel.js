@@ -6,7 +6,6 @@ const weatherMeasurementSchema = new mongoose.Schema({
   id: {
     type: Number,
     unique: true,
-    required: true,
   },
   weatherStation: {
     type: mongoose.Schema.Types.ObjectId,
@@ -51,13 +50,9 @@ const weatherMeasurementSchema = new mongoose.Schema({
   },
 });
 
-weatherMeasurementSchema.pre('save', function pre(next) {
-  const doc = this;
-  counter.findOneAndUpdate({ _id: 'weatherCounter' }, { $inc: { seq: 1 } }, (error, count) => {
-    if (error) return next(error);
-    doc.testvalue = count.seq;
-    next();
-  });
+weatherMeasurementSchema.pre('save', async function () { // eslint-disable-line
+  const count = await counter.findOneAndUpdate({ _id: 'weatherCounter' }, { $inc: { seq: 1 } });
+  this.id = count.seq;
 });
 
 const weatherMeasurementModel = mongoose.model('WeatherMeasurement', weatherMeasurementSchema);

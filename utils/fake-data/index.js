@@ -24,11 +24,6 @@ const weatherMeasurementCollection = numMeasurements => ({
   },
 });
 
-const addIncrementalId = collection => collection.forEach((item, idx) => {
-  item.id = idx + 1;
-  return item;
-});
-
 const shuffle = (a) => {
   for (let i = a.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -43,7 +38,6 @@ export default {
 
     const weatherMeasurements = jsf(weatherMeasurementCollection(numMeasurements * weatherStations.length * ports.length), refs);
     weatherMeasurements.sort((a, b) => a.date - b.date);
-    addIncrementalId(weatherMeasurements);
     shuffle(weatherMeasurements);
 
     ports.forEach((port) => {

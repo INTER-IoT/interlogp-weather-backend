@@ -7,6 +7,7 @@
     "dev": "nodemon src/index.js --exec babel-node --presets env",
     "build": "babel src -d dist",
     "populate": "babel-node --presets env utils/populate",
+    "init-db": "babel-node --presets env utils/initDb",
     "send-measurement": "babel-node --presets env utils/sendMeasurement"
   },
   "author": "",

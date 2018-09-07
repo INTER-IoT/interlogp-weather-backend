@@ -30,6 +30,7 @@ db.on('error', () => {
 });
 
 const run = async () => {
+  await CounterModel.remove({});
   await new CounterModel({ _id: 'weatherCounter' }).save();
   process.stdout.write('Saving ports...');
   await PortModel.remove({});
