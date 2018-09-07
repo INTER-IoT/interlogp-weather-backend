@@ -1,0 +1,74 @@
+<valenciaPortData xmlns="http://ws.wso2.org/dataservice/getMeteoStations">
+    <meteoStations>
+        <latitude>39.64264</latitude>
+        <name>SAG D.Este</name>
+        <active>1</active>
+        <location>Dique Este Sagunto</location>
+        <portId>2</portId>
+        <meteoStationId>5</meteoStationId>
+        <longitude>-0.20551</longitude>
+    </meteoStations>
+    <meteoStations>
+        <latitude>39.43572</latitude>
+        <name>D.Este</name>
+        <active>1</active>
+        <location>Dique del Este Valencia</location>
+        <portId>1</portId>
+        <meteoStationId>1</meteoStationId>
+        <longitude>-0.30577</longitude>
+    </meteoStations>
+    <meteoStations>
+        <latitude>39.459396</latitude>
+        <name>VR-013</name>
+        <active>1</active>
+        <location>VR-013</location>
+        <portId>1</portId>
+        <meteoStationId>8</meteoStationId>
+        <longitude>-0.323069</longitude>
+    </meteoStations>
+    <meteoStations>
+        <latitude>39.43265</latitude>
+        <name>P.Felipe</name>
+        <active>1</active>
+        <location>Muelle Príncipe Felipe Valencia</location>
+        <portId>1</portId>
+        <meteoStationId>2</meteoStationId>
+        <longitude>-0.322453</longitude>
+    </meteoStations>
+    <meteoStations>
+        <latitude>39.65114</latitude>
+        <name>Sagunto</name>
+        <active>1</active>
+        <location>Oficinas Sagunto</location>
+        <portId>2</portId>
+        <meteoStationId>4</meteoStationId>
+        <longitude>-0.22023</longitude>
+    </meteoStations>
+    <meteoStations>
+        <latitude>39.44301</latitude>
+        <name>XITA</name>
+        <active>1</active>
+        <location>Muelle XITA</location>
+        <portId>1</portId>
+        <meteoStationId>7</meteoStationId>
+        <longitude>-0.312564</longitude>
+    </meteoStations>
+    <meteoStations>
+        <latitude>38.99516</latitude>
+        <name>M.Serpis</name>
+        <active>1</active>
+        <location>Muelle Serpis Gandía</location>
+        <portId>3</portId>
+        <meteoStationId>9</meteoStationId>
+        <longitude>-0.15161</longitude>
+    </meteoStations>
+    <meteoStations>
+        <latitude>39.449036</latitude>
+        <name>Silo</name>
+        <active>1</active>
+        <location>Silo Cemex Valencia</location>
+        <portId>1</portId>
+        <meteoStationId>3</meteoStationId>
+        <longitude>-0.321485</longitude>
+    </meteoStations>
+</valenciaPortData>

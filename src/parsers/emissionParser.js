@@ -63,5 +63,5 @@ const matchItems = [
 ];
 
 export default {
-  parse: message => parser.parse(message, matchItems),
+  parse: async message => parser.parse(message, matchItems),
 };

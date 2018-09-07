@@ -8,6 +8,8 @@ import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 
+import { weatherMeasurementEndpoint } from './endpoints';
+
 import schema from './schema';
 
 import config from './config';
@@ -30,6 +32,8 @@ if (config.dev) {
     endpointURL: '/graphql',
   }));
 }
+
+app.post('/weatherMeasurement', weatherMeasurementEndpoint);
 
 const server = createServer(app);
 

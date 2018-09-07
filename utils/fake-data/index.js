@@ -2,8 +2,7 @@
 
 import jsf from 'json-schema-faker';
 import ports from './ports';
-import weatherStationSchema from './weatherStationSchema';
-import positionSchema from './positionSchema';
+import weatherStations from './stations';
 import weatherMeasurementSchema from './weatherMeasurementSchema';
 
 jsf.extend('faker', () => {
@@ -13,19 +12,8 @@ jsf.extend('faker', () => {
 });
 
 const refs = [
-  positionSchema,
   weatherMeasurementSchema,
-  weatherStationSchema,
 ];
-
-const weatherStationCollection = numStations => ({
-  type: 'array',
-  minItems: numStations,
-  maxItems: numStations,
-  items: {
-    $ref: 'weatherStation',
-  },
-});
 
 const weatherMeasurementCollection = numMeasurements => ({
   type: 'array',
@@ -50,25 +38,19 @@ const shuffle = (a) => {
 };
 
 export default {
-  generate: (numStations, numMeasurements) => {
+  generate: (numMeasurements) => {
     ports.sort((a, b) => a.id - b.id);
 
-    const weatherStations = jsf(weatherStationCollection(numStations * ports.length), refs);
-    addIncrementalId(weatherStations);
-
-    const weatherMeasurements = jsf(weatherMeasurementCollection(numMeasurements * numStations * ports.length), refs);
+    const weatherMeasurements = jsf(weatherMeasurementCollection(numMeasurements * weatherStations.length * ports.length), refs);
     weatherMeasurements.sort((a, b) => a.date - b.date);
     addIncrementalId(weatherMeasurements);
     shuffle(weatherMeasurements);
 
     ports.forEach((port) => {
-      port.weatherStations = weatherStations.splice(0, numStations);
+      port.weatherStations = weatherStations.filter(weatherStation => weatherStation.portId === port.id);
       port.weatherStations.forEach((weatherStation) => {
-        weatherStation.position.lat = port.position.lat + weatherStation.position.latShift;
-        weatherStation.position.lon = port.position.lon + weatherStation.position.lonShift;
-        delete weatherStation.position.latShift;
-        delete weatherStation.position.lonShift;
         weatherStation.port = port;
+        delete weatherStation.portId;
         weatherStation.weatherMeasurements = weatherMeasurements.splice(0, numMeasurements);
         weatherStation.weatherMeasurements.sort((a, b) => a.id - b.id);
         weatherStation.weatherMeasurements.forEach((weatherMeasurement) => {

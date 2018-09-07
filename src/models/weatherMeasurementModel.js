@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import counter from './counterModel';
+
 const weatherMeasurementSchema = new mongoose.Schema({
   id: {
     type: Number,
@@ -47,6 +49,15 @@ const weatherMeasurementSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+});
+
+weatherMeasurementSchema.pre('save', function pre(next) {
+  const doc = this;
+  counter.findOneAndUpdate({ _id: 'weatherCounter' }, { $inc: { seq: 1 } }, (error, count) => {
+    if (error) return next(error);
+    doc.testvalue = count.seq;
+    next();
+  });
 });
 
 const weatherMeasurementModel = mongoose.model('WeatherMeasurement', weatherMeasurementSchema);

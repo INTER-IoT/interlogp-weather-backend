@@ -1,9 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 
 import mongoose from 'mongoose';
-import config from './config';
 
-import { PortModel, WeatherStationModel, WeatherMeasurementModel } from './models';
+import { PortModel, WeatherStationModel, WeatherMeasurementModel, CounterModel } from '../src/models';
 
 import {
   fakeGenerator,
@@ -12,14 +11,12 @@ import {
   WeatherMeasurements,
 } from './fake-connector';
 
-fakeGenerator(10, 100);
+const mongourl = process.argv[2];
+const numMeasurements = process.argv[3];
 
-const user = process.env.MONGODB_USER;
-const pwd = process.env.MONGODB_PASSWORD;
+fakeGenerator(numMeasurements);
 
-const userString = user ? pwd ? `${user}:${pwd}@` : `${user}@` : ''; // eslint-disable-line no-nested-ternary
-
-mongoose.connect(`mongodb://${userString}${config.mongo.host}:${config.mongo.port}/${config.mongo.database}`, {
+mongoose.connect(mongourl, {
   useNewUrlParser: true,
 });
 
@@ -33,6 +30,7 @@ db.on('error', () => {
 });
 
 const run = async () => {
+  await new CounterModel({ _id: 'weatherCounter' }).save();
   process.stdout.write('Saving ports...');
   await PortModel.remove({});
   const ports = await Promise.all(Ports.ports().map(port => new PortModel(port).save()));

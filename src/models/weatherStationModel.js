@@ -6,6 +6,10 @@ const weatherStationSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+  name: {
+    type: String,
+    required: true,
+  },
   port: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Port',

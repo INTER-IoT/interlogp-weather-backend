@@ -25,6 +25,7 @@ const typeDefs = [`
     id: Int!
     position: Position!
     port: Port!
+    name: String!
   }
 
   type WeatherMeasurement {

@@ -1,5 +1,7 @@
 const compareFlatUnsortedArray = (a1, a2) => {
   if (!a1 || !a2) return false;
+  if (!Array.isArray(a1)) a1 = [a1];
+  if (!Array.isArray(a2)) a2 = [a2];
   if (a1.length !== a2.length) return false;
   a1.sort();
   a2.sort();
@@ -27,7 +29,7 @@ const parse = (message, matchItems) => {
     const match = flat.find(flatItem => compareFlatUnsortedArray(flatItem['@type'], matchItem.typeMatch));
     if (!Array.isArray(matchItem.path)) matchItem.path = [matchItem.path];
     let value = matchItem.path.reduce((a, b) => a[b], match);
-    if (matchItem.p) value = matchItem.p(value);
+    if (matchItem.p) value = matchItem.p(value, flat);
     if (!Array.isArray(matchItem.key)) matchItem.key = [matchItem.key];
     matchItem.key.reduce((a, b, i) => {
       if (i === matchItem.key.length - 1) a[b] = value;

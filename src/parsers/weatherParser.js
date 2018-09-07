@@ -15,55 +15,55 @@ const matchItems = [
   {
     typeMatch: ['InterIoT:LogVPmod#WeatherMeasurment', 'sosa:Observation'],
     path: ['sosa:resultTime', '@value'],
-    key: 'resultTime',
+    key: 'date',
     p: typeParsers.date,
   },
   {
     typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#Precipitation'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'precipitation'],
+    key: 'precipitation',
     p: typeParsers.float,
   },
   {
     typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#WindSpeed'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'windspeed'],
+    key: 'windSpeed',
     p: typeParsers.float,
   },
   {
     typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#Radiation'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'radiation'],
+    key: 'solarRadiation',
     p: typeParsers.float,
   },
   {
     typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#Pressure'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'pressure'],
+    key: 'pressure',
     p: typeParsers.float,
   },
   {
     typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#AverageHumidity'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'avgHumidity'],
+    key: 'humidity',
     p: typeParsers.float,
   },
   {
     typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#SeaTemperature'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'seaTemperature'],
+    key: 'seaTemperature',
     p: typeParsers.float,
   },
   {
     typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#AverageTemperature'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'avgTemperature'],
+    key: 'averageTemperature',
     p: typeParsers.float,
   },
   {
     typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#WindDirection'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'windDirection'],
+    key: 'windDirection',
     p: typeParsers.float,
   },
   {
@@ -75,5 +75,5 @@ const matchItems = [
 ];
 
 export default {
-  parse: message => parser.parse(message, matchItems),
+  parse: async message => parser.parse(message, matchItems),
 };
