@@ -1,13 +1,12 @@
-import { WeatherStationModel, WeatherMeasurementModel } from '../models';
+import { WeatherMeasurements } from '../connectors/mongo';
 import { weatherParser } from '../parsers';
-
+import { pubsub, topics } from '../pubsub';
 
 export default async (req, res) => {
   try {
-    const measurement = await weatherParser.parse(req.body);
-    measurement.weatherStation = await WeatherStationModel.findOne({ id: measurement.stationId });
-    const resp = await new WeatherMeasurementModel(measurement).save();
-    console.log(resp);
+    let measurement = await weatherParser.parse(req.body);
+    measurement = await WeatherMeasurements.saveNewMeasurement(measurement); // gets populated
+    pubsub.publish(topics.NEW_MEASUREMENT_TOPIC, { newMeasurement: measurement });
     res.send('ok');
   } catch (error) {
     console.log(error);

@@ -1,12 +1,13 @@
 /* eslint no-unused-vars: off */
 
 import { makeExecutableSchema } from 'graphql-tools';
+import { pubsub, topics } from './pubsub';
 
 // import { PubSub, withFilter } from 'graphql-subscriptions';
 
 // const pubsub = new PubSub();
 
-import { Ports, WeatherStations, WeatherMeasurements } from './mongo-connector';
+import { Ports, WeatherStations, WeatherMeasurements } from './connectors';
 
 const typeDefs = [`
 
@@ -51,8 +52,13 @@ const typeDefs = [`
     lastMeasurementsByPort(portId: Int!): [WeatherMeasurement]
   }
 
+  type Subscription {
+    newMeasurement: WeatherMeasurement
+  }
+
   schema {
     query: Query
+    subscription: Subscription
   }
 
 `];
@@ -78,6 +84,11 @@ const resolvers = {
     },
     lastMeasurementsByPort(root, { portId }, context) {
       return WeatherMeasurements.lastMeasurementsByPort(portId);
+    },
+  },
+  Subscription: {
+    newMeasurement: {
+      subscribe: () => pubsub.asyncIterator(topics.NEW_MEASUREMENT_TOPIC),
     },
   },
 };

@@ -1,0 +1,35 @@
+import { WeatherMeasurementModel, WeatherStationModel } from './models';
+import WeatherStations from './weatherStations';
+
+const WeatherMeasurements = {};
+
+WeatherMeasurements.weatherMeasurements = () => WeatherMeasurementModel.find().populate('weatherStation');
+
+WeatherMeasurements.weatherMeasurementsByStation = async (weatherStationId) => {
+  const weatherMeasurements = await WeatherMeasurementModel.find().populate({
+    path: 'weatherStation',
+    match: {
+      id: weatherStationId,
+    },
+  });
+  return weatherMeasurements.filter(weatherMeasurement => weatherMeasurement.weatherStation !== null);
+};
+
+WeatherMeasurements.lastMeasurementByStation = async (weatherStationId) => {
+  const weatherMeasurements = await WeatherMeasurements.weatherMeasurementsByStation(weatherStationId);
+  return weatherMeasurements.sort((a, b) => b.date - a.date)[0];
+};
+
+WeatherMeasurements.lastMeasurementsByPort = async (portId) => {
+  const weatherStations = await WeatherStations.weatherStationsByPort(portId);
+  const measurements = await Promise.all(weatherStations.map(weatherStation => WeatherMeasurements.lastMeasurementByStation(weatherStation.id)));
+  return measurements;
+};
+
+WeatherMeasurements.saveNewMeasurement = async (measurement) => {
+  measurement.weatherStation = await WeatherStationModel.findOne({ id: measurement.stationId });
+  await new WeatherMeasurementModel(measurement).save();
+  return measurement;
+};
+
+export default WeatherMeasurements;

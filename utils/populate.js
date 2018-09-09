@@ -2,7 +2,7 @@
 
 import mongoose from 'mongoose';
 
-import { PortModel, WeatherStationModel, WeatherMeasurementModel, CounterModel } from '../src/models';
+import { PortModel, WeatherStationModel, WeatherMeasurementModel, CounterModel } from '../src/connectors/mongo/models';
 
 import {
   fakeGenerator,

@@ -7,7 +7,7 @@ import {
   WeatherStationModel,
   CounterModel,
   WeatherMeasurementModel,
-} from '../src/models';
+} from '../src/connectors/mongo/models';
 
 import portData from './data/ports';
 

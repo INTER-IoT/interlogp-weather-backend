@@ -16,6 +16,9 @@ import config from './config';
 
 const PORT = config.server.port;
 
+const GRAPHQL_PATH = '/graphql';
+const SUBSCRIPTIONS_PATH = '/subscriptions';
+
 const app = express();
 
 app.use(cors());
@@ -25,11 +28,12 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(`${__dirname}/static`));
 
-app.use('/graphql', graphqlExpress({ schema }));
+app.use(GRAPHQL_PATH, graphqlExpress({ schema }));
 
 if (config.dev) {
   app.use('/graphiql', graphiqlExpress({
     endpointURL: '/graphql',
+    subscriptionsEndpoint: 'ws://localhost:3020/subscriptions',
   }));
 }
 
@@ -38,8 +42,8 @@ app.post('/weatherMeasurement', weatherMeasurementEndpoint);
 const server = createServer(app);
 
 server.listen(PORT, () => {
-  console.log(`API Server is now running on http://localhost:${PORT}/graphql`);
-  console.log(`API Subscriptions server is now running on ws://localhost:${PORT}/subscriptions`);
+  console.log(`API Server is now running on http://localhost:${PORT}${GRAPHQL_PATH}`);
+  console.log(`API Subscriptions server is now running on ws://localhost:${PORT}${SUBSCRIPTIONS_PATH}`);
 });
 
 // Subs
@@ -51,6 +55,6 @@ SubscriptionServer.create(
   },
   {
     server,
-    path: '/subscriptions',
+    path: SUBSCRIPTIONS_PATH,
   },
 );
