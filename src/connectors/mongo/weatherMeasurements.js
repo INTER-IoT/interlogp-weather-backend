@@ -3,9 +3,9 @@ import WeatherStations from './weatherStations';
 
 const WeatherMeasurements = {};
 
-WeatherMeasurements.weatherMeasurements = () => WeatherMeasurementModel.find().populate('weatherStation');
+WeatherMeasurements.measurements = () => WeatherMeasurementModel.find().populate('weatherStation');
 
-WeatherMeasurements.weatherMeasurementsByStation = async (weatherStationId) => {
+WeatherMeasurements.measurementsByStation = async (weatherStationId) => {
   const weatherMeasurements = await WeatherMeasurementModel.find().populate({
     path: 'weatherStation',
     match: {
@@ -16,14 +16,18 @@ WeatherMeasurements.weatherMeasurementsByStation = async (weatherStationId) => {
 };
 
 WeatherMeasurements.lastMeasurementByStation = async (weatherStationId) => {
-  const weatherMeasurements = await WeatherMeasurements.weatherMeasurementsByStation(weatherStationId);
+  const weatherMeasurements = await WeatherMeasurements.measurementsByStation(weatherStationId);
   return weatherMeasurements.sort((a, b) => b.date - a.date)[0];
 };
 
 WeatherMeasurements.lastMeasurementsByPort = async (portId) => {
-  const weatherStations = await WeatherStations.weatherStationsByPort(portId);
+  const weatherStations = await WeatherStations.stationsByPort(portId);
   const measurements = await Promise.all(weatherStations.map(weatherStation => WeatherMeasurements.lastMeasurementByStation(weatherStation.id)));
-  return measurements;
+
+  return measurements.reduce((agg, item) => {
+    if (item !== undefined && item !== null) agg.push(item);
+    return agg;
+  }, []);
 };
 
 WeatherMeasurements.saveNewMeasurement = async (measurement) => {

@@ -7,7 +7,15 @@ import { pubsub, topics } from './pubsub';
 
 // const pubsub = new PubSub();
 
-import { Ports, WeatherStations, WeatherMeasurements } from './connectors';
+import {
+  Ports,
+  WeatherStations,
+  WeatherMeasurements,
+  EmissionStations,
+  EmissionMeasurements,
+  SoundStations,
+  SoundMeasurements,
+} from './connectors';
 
 const typeDefs = [`
 
@@ -29,6 +37,20 @@ const typeDefs = [`
     name: String!
   }
 
+  type EmissionStation {
+    id: Int!
+    position: Position!
+    port: Port!
+    name: String!
+  }
+
+  type SoundStation {
+    id: Int!
+    position: Position!
+    port: Port!
+    name: String!
+  }
+
   type WeatherMeasurement {
     id: Int!
     date: String!
@@ -43,13 +65,46 @@ const typeDefs = [`
     weatherStation: WeatherStation!
   }
 
+  type EmissionMeasurement {
+    id: Int!
+    date: String!
+    particles: Float!
+    nox: Int!
+    so2: Int!
+    no2: Int!
+    no: Int!
+    co: Float!
+    emissionStation: EmissionStation!
+  }
+
+  type SoundMeasurement {
+    id: Int!
+    start: String!
+    end: String!
+    maxLevel: Int!
+    minLevel: Int!
+    avgLevel: Int!
+    soundStation: SoundStation!
+  }
+
   type Query {
-    hello: String
     ports: [Port]
+
     weatherStations(portId: Int): [WeatherStation]
     weatherMeasurements(weatherStationId: Int): [WeatherMeasurement]
-    lastMeasurementByStation(weatherStationId: Int!): WeatherMeasurement
-    lastMeasurementsByPort(portId: Int!): [WeatherMeasurement]
+    lastWeatherMeasurementByStation(weatherStationId: Int!): WeatherMeasurement
+    lastWeatherMeasurementsByPort(portId: Int!): [WeatherMeasurement]
+
+    emissionStations(portId: Int): [EmissionStation]
+    emissionMeasurements(emissionStationId: Int): [EmissionMeasurement]
+    lastEmissionMeasurementByStation(emissionStationId: Int!): EmissionMeasurement
+    lastEmissionMeasurementsByPort(portId: Int!): [EmissionMeasurement]
+
+    soundStations(portId: Int): [SoundStation]
+    soundMeasurements(soundStationId: Int): [SoundMeasurement]
+    lastSoundMeasurementByStation(soundStationId: Int!): SoundMeasurement
+    lastSoundMeasurementsByPort(portId: Int!): [SoundMeasurement]
+
   }
 
   type Subscription {
@@ -65,25 +120,53 @@ const typeDefs = [`
 
 const resolvers = {
   Query: {
-    hello(root, args, context) {
-      return 'Hello World';
-    },
     ports(root, args, context) {
       return Ports.ports();
     },
+    // weather queries
     weatherStations(root, { portId }, context) {
-      if (portId !== undefined) return WeatherStations.weatherStationsByPort(portId);
-      return WeatherStations.weatherStations();
+      if (portId !== undefined) return WeatherStations.stationsByPort(portId);
+      return WeatherStations.stations();
     },
     weatherMeasurements(root, { weatherStationId }, context) {
-      if (weatherStationId !== undefined) return WeatherMeasurements.weatherMeasurementsByStation(weatherStationId);
-      return WeatherMeasurements.weatherMeasurements();
+      if (weatherStationId !== undefined) return WeatherMeasurements.measurementsByStation(weatherStationId);
+      return WeatherMeasurements.measurements();
     },
-    lastMeasurementByStation(root, { weatherStationId }, context) {
+    lastWeatherMeasurementByStation(root, { weatherStationId }, context) {
       return WeatherMeasurements.lastMeasurementByStation(weatherStationId);
     },
-    lastMeasurementsByPort(root, { portId }, context) {
+    lastWeatherMeasurementsByPort(root, { portId }, context) {
       return WeatherMeasurements.lastMeasurementsByPort(portId);
+    },
+    // emission queries
+    emissionStations(root, { portId }, context) {
+      if (portId !== undefined) return EmissionStations.stationsByPort(portId);
+      return EmissionStations.stations();
+    },
+    emissionMeasurements(root, { emissionStationId }, context) {
+      if (emissionStationId !== undefined) return EmissionMeasurements.measurementsByStation(emissionStationId);
+      return EmissionMeasurements.measurements();
+    },
+    lastEmissionMeasurementByStation(root, { emissionStationId }, context) {
+      return EmissionMeasurements.lastMeasurementByStation(emissionStationId);
+    },
+    lastEmissionMeasurementsByPort(root, { portId }, context) {
+      return EmissionMeasurements.lastMeasurementsByPort(portId);
+    },
+    // sound queries
+    soundStations(root, { portId }, context) {
+      if (portId !== undefined) return SoundStations.stationsByPort(portId);
+      return SoundStations.stations();
+    },
+    soundMeasurements(root, { soundStationId }, context) {
+      if (soundStationId !== undefined) return SoundMeasurements.measurementsByStation(soundStationId);
+      return SoundMeasurements.measurements();
+    },
+    lastSoundMeasurementByStation(root, { soundStationId }, context) {
+      return SoundMeasurements.lastMeasurementByStation(soundStationId);
+    },
+    lastSoundMeasurementsByPort(root, { portId }, context) {
+      return SoundMeasurements.lastMeasurementsByPort(portId);
     },
   },
   Subscription: {

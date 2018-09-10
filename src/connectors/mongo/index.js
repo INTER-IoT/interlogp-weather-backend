@@ -4,6 +4,10 @@ import config from '../../config';
 import Ports from './ports';
 import WeatherStations from './weatherStations';
 import WeatherMeasurements from './weatherMeasurements';
+import EmissionStations from './emissionStations';
+import EmissionMeasurements from './emissionMeasurements';
+import SoundStations from './soundStations';
+import SoundMeasurements from './soundMeasurements';
 
 const mongo = {};
 
@@ -33,10 +37,18 @@ export {
   Ports,
   WeatherStations,
   WeatherMeasurements,
+  EmissionStations,
+  EmissionMeasurements,
+  SoundStations,
+  SoundMeasurements,
 };
 
 export default {
   Ports,
   WeatherStations,
   WeatherMeasurements,
+  EmissionStations,
+  EmissionMeasurements,
+  SoundStations,
+  SoundMeasurements,
 };

@@ -2,9 +2,9 @@ import { WeatherStationModel } from './models';
 
 const WeatherStations = {};
 
-WeatherStations.weatherStations = () => WeatherStationModel.find().populate('port');
+WeatherStations.stations = () => WeatherStationModel.find().populate('port');
 
-WeatherStations.weatherStationsByPort = async (portId) => {
+WeatherStations.stationsByPort = async (portId) => {
   const weatherStations = await WeatherStationModel.find().populate({
     path: 'port',
     match: {

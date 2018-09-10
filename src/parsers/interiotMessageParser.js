@@ -26,7 +26,9 @@ const parse = (message, matchItems) => {
   const flat = flatenize(message);
   const matches = {};
   matchItems.forEach((matchItem) => {
-    const match = flat.find(flatItem => compareFlatUnsortedArray(flatItem['@type'], matchItem.typeMatch));
+    let match;
+    if (matchItem.match) match = flat.find(matchItem.match);
+    else match = flat.find(flatItem => compareFlatUnsortedArray(flatItem['@type'], matchItem.typeMatch));
     if (!Array.isArray(matchItem.path)) matchItem.path = [matchItem.path];
     let value = matchItem.path.reduce((a, b) => a[b], match);
     if (matchItem.p) value = matchItem.p(value, flat);

@@ -8,7 +8,7 @@ import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 
-import { weatherMeasurementEndpoint } from './endpoints';
+import measurementInputApp from './measurement-input';
 
 import schema from './schema';
 
@@ -18,6 +18,9 @@ const PORT = config.server.port;
 
 const GRAPHQL_PATH = '/graphql';
 const SUBSCRIPTIONS_PATH = '/subscriptions';
+const MEASUREMENTS_PATH = '/measurements';
+const GRAPHIQL_PATH = '/graphiql';
+const STATIC_FILE_PATH = '/static';
 
 const app = express();
 
@@ -26,18 +29,18 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/', express.static(`${__dirname}/static`));
+app.use('/', express.static(`${__dirname}${STATIC_FILE_PATH}`));
 
 app.use(GRAPHQL_PATH, graphqlExpress({ schema }));
 
 if (config.dev) {
-  app.use('/graphiql', graphiqlExpress({
-    endpointURL: '/graphql',
-    subscriptionsEndpoint: 'ws://localhost:3020/subscriptions',
+  app.use(GRAPHIQL_PATH, graphiqlExpress({
+    endpointURL: GRAPHQL_PATH,
+    subscriptionsEndpoint: `ws://localhost:${PORT}${SUBSCRIPTIONS_PATH}`,
   }));
 }
 
-app.post('/weatherMeasurement', weatherMeasurementEndpoint);
+app.use(MEASUREMENTS_PATH, measurementInputApp);
 
 const server = createServer(app);
 
