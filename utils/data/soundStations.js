@@ -1,30 +1,30 @@
 /* eslint-disable */
 export default [
   {
-    "name": "Valencia Sound Station",
-    "portId": 1,
     "id": 1,
+    "name": "Control Túnel",
     "position": {
-      "lat": 39.453154,
-      "lon": -0.324689
-    }
+      "lat": 39.453403,
+      "lon": -0.328961
+    },
+    "portId": 1
   },
   {
-    "name": "Sagunto Sound Station",
-    "portId": 2,
     "id": 2,
+    "name": "Cabina Inmisión",
     "position": {
-      "lat": 39.638950,
-      "lon": -0.217258
-    }
+      "lat": 39.459396,
+      "lon": -0.323069
+    },
+    "portId": 1
   },
   {
-    "name": "Gandia Sound Station",
-    "portId": 3,
     "id": 3,
+    "name": "CCA Río Túria",
     "position": {
-      "lat": 39.993798,
-      "lon": -0.148332
-    }
-  },
+      "lat": 39.450413,
+      "lon": -0.329083
+    },
+    "portId": 1
+  }
 ];

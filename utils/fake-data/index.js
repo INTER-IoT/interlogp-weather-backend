@@ -1,11 +1,9 @@
 /* eslint-disable global-require */
 
 import jsf from 'json-schema-faker';
-import ports from '../data/ports';
-import weatherStations from '../data/weatherStations';
-import emissionStations from '../data/emissionStations';
 import weatherMeasurementSchema from './weatherMeasurementSchema';
 import emissionMeasurementSchema from './emissionMeasurementSchema';
+import soundMeasurementSchema from './soundMeasurementSchema';
 
 jsf.extend('faker', () => {
   const faker = require('faker');
@@ -16,6 +14,7 @@ jsf.extend('faker', () => {
 const refs = [
   weatherMeasurementSchema,
   emissionMeasurementSchema,
+  soundMeasurementSchema,
 ];
 
 const shuffle = (a) => {
@@ -40,39 +39,16 @@ const generateMeasurements = (ref, num) => {
   return measurements;
 };
 
-export {
-  generateMeasurements,
+const fakeData = {
+  generateWeatherMeasurements: num => generateMeasurements('weatherMeasurement', num),
+  generateEmissionMeasurements: num => generateMeasurements('emissionMeasurement', num),
+  generateSoundMeasurements: num => generateMeasurements('soundMeasurement', num).map((measurement) => {
+    measurement.avgLevel = Math.round((measurement.maxLevel + measurement.minLevel) / 2);
+    measurement.end = new Date(measurement.date - 2000);
+    measurement.start = new Date(measurement.date - 2000 - measurement.duration);
+    delete measurement.duration;
+    return measurement;
+  }),
 };
 
-export default {
-  generate: (numMeasurements) => {
-    ports.sort((a, b) => a.id - b.id);
-
-    const weatherMeasurements = generateMeasurements('weatherMeasurement', numMeasurements * weatherStations.length * ports.length);
-    const emissionMeasurements = generateMeasurements('emissionMeasurement', numMeasurements * emissionStations.length * ports.length);
-
-    ports.forEach((port) => {
-      port.weatherStations = weatherStations.filter(weatherStation => weatherStation.portId === port.id);
-      port.weatherStations.forEach((weatherStation) => {
-        weatherStation.port = port;
-        delete weatherStation.portId;
-        weatherStation.weatherMeasurements = weatherMeasurements.splice(0, numMeasurements);
-        weatherStation.weatherMeasurements.sort((a, b) => a.id - b.id);
-        weatherStation.weatherMeasurements.forEach((weatherMeasurement) => {
-          weatherMeasurement.weatherStation = weatherStation;
-        });
-      });
-      port.emissionStations = emissionStations.filter(emissionStation => emissionStation.portId === port.id);
-      port.emissionStations.forEach((emissionStation) => {
-        emissionStation.port = port;
-        delete emissionStation.portId;
-        emissionStation.emissionMeasurements = emissionMeasurements.splice(0, numMeasurements);
-        emissionStation.emissionMeasurements.sort((a, b) => a.id - b.id);
-        emissionStation.emissionMeasurements.forEach((emissionMeasurement) => {
-          emissionMeasurement.emissionStation = emissionStation;
-        });
-      });
-    });
-    return ports;
-  },
-};
+export default fakeData;

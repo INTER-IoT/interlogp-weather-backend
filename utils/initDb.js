@@ -9,6 +9,8 @@ import {
   SoundStationModel,
   CounterModel,
   WeatherMeasurementModel,
+  EmissionMeasurementModel,
+  SoundMeasurementModel,
 } from '../src/connectors/mongo/models';
 
 import portData from './data/ports';
@@ -32,14 +34,22 @@ db.on('error', () => {
 });
 
 const run = async () => {
+  process.stdout.write('Removing existing data...');
   await CounterModel.remove({});
   await PortModel.remove({});
   await WeatherStationModel.remove({});
   await EmissionStationModel.remove({});
   await SoundStationModel.remove({});
   await WeatherMeasurementModel.remove({});
+  await EmissionMeasurementModel.remove({});
+  await SoundMeasurementModel.remove({});
+  process.stdout.write('done\n');
 
+  process.stdout.write('Saving counters...');
   await new CounterModel({ _id: 'weatherCounter' }).save();
+  await new CounterModel({ _id: 'emissionCounter' }).save();
+  await new CounterModel({ _id: 'soundCounter' }).save();
+  process.stdout.write('done\n');
 
   process.stdout.write('Saving ports...');
   const ports = await Promise.all(portData.map(port => new PortModel(port).save()));
