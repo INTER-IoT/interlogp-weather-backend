@@ -55,9 +55,11 @@ const typeParsers = {
 export {
   parser,
   typeParsers,
+  flatenize,
 };
 
 export default {
   parser,
   typeParsers,
+  flatenize,
 };
