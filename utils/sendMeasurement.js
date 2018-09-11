@@ -1,24 +1,36 @@
-import request from 'request'; // eslint-disable-line import/no-extraneous-dependencies
-import { weatherMessageGenerator } from './raw-message-generators';
+import rp from 'request-promise'; // eslint-disable-line import/no-extraneous-dependencies
+import { weatherMessageGenerator, emissionMessageGenerator, soundMessageGenerator } from './raw-message-generators';
 
 // console.log(weatherMessageGenerator.generate(1, 1)[0]);
 
-const url = process.argv[2];
+const getGenerator = type => ({
+  weather: weatherMessageGenerator,
+  emission: emissionMessageGenerator,
+  sound: soundMessageGenerator,
+})[type];
 
-const stationId = process.argv[3];
+const generator = getGenerator(process.argv[2]);
+
+const url = process.argv[3];
+
+const stationId = process.argv[4];
 
 const options = {
   method: 'POST',
   url,
   headers: {
-    'postman-token': 'da28a7a5-3caf-00cd-e35b-4bb98143253a',
     'cache-control': 'no-cache',
     'content-type': 'application/json',
   },
-  body: weatherMessageGenerator.generate(stationId, 1)[0],
+  resolveWithFullResponse: true,
+  body: generator.generate(stationId, 1, new Date())[0],
 };
 
-request(options, (error, response) => {
-  if (error) throw new Error(error);
-  else console.log(response.statusCode);
-});
+(async () => {
+  try {
+    const response = await rp(options);
+    console.log(response.statusCode);
+  } catch (error) {
+    console.error(error.stack);
+  }
+})();
