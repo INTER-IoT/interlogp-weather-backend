@@ -30,7 +30,9 @@ SoundMeasurements.lastMeasurementsByPort = async portId => (await SoundStations.
 
 SoundMeasurements.saveNewMeasurement = async (measurement) => {
   console.log('saving...');
+  [measurement.soundStation] = (await SoundStations.stations());
   console.log(measurement);
+  return measurement;
 };
 
 export default SoundMeasurements;

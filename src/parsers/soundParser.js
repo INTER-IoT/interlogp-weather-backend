@@ -17,35 +17,38 @@ const matchItems = [
   {
     typeMatch: 'http://www.w3.org/2006/time#Interval',
     path: ['http://www.w3.org/2006/time#hasBeginning', '@id'],
-    key: ['measurement', 'start'],
+    key: 'start',
     p: extractTimestampFromId,
   },
   {
     typeMatch: 'http://www.w3.org/2006/time#Interval',
     path: ['http://www.w3.org/2006/time#hasEnd', '@id'],
-    key: ['measurement', 'end'],
+    key: 'end',
     p: extractTimestampFromId,
   },
   {
     typeMatch: ['InterIoT:LogVPmod#MaxSoundLevel', 'sosa:Result'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'maxSoundLevel'],
+    key: 'maxLevel',
     p: typeParsers.int,
   },
   {
     typeMatch: ['InterIoT:LogVPmod#AvgSoundLevel', 'sosa:Result'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'avgSoundLevel'],
+    key: 'avgLevel',
     p: typeParsers.int,
   },
   {
     typeMatch: ['InterIoT:LogVPmod#MinSoundLevel', 'sosa:Result'],
     path: ['iiot:hasResultValue', '@value'],
-    key: ['measurement', 'minSoundLevel'],
+    key: 'minLevel',
     p: typeParsers.int,
   },
 ];
 
 export default {
-  parse: async message => parser.parse(message, matchItems),
+  parse: async message => parser.parse(message, matchItems, (parsed) => {
+    parsed.date = parsed.start;
+    return parsed;
+  }),
 };

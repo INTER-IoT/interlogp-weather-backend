@@ -22,7 +22,7 @@ const flatenize = (message, items) => {
   return items;
 };
 
-const parse = (message, matchItems) => {
+const parse = (message, matchItems, post) => {
   const flat = flatenize(message);
   const matches = {};
   matchItems.forEach((matchItem) => {
@@ -39,6 +39,7 @@ const parse = (message, matchItems) => {
       return a[b];
     }, matches);
   });
+  if (post) return post(matches);
   return matches;
 };
 

@@ -79,6 +79,7 @@ const typeDefs = [`
 
   type SoundMeasurement {
     id: Int!
+    date: String!
     start: String!
     end: String!
     maxLevel: Int!
@@ -108,7 +109,9 @@ const typeDefs = [`
   }
 
   type Subscription {
-    newMeasurement: WeatherMeasurement
+    weatherMeasurement: WeatherMeasurement
+    emissionMeasurement: EmissionMeasurement
+    soundMeasurement: SoundMeasurement
   }
 
   schema {
@@ -170,8 +173,14 @@ const resolvers = {
     },
   },
   Subscription: {
-    newMeasurement: {
-      subscribe: () => pubsub.asyncIterator(topics.NEW_MEASUREMENT_TOPIC),
+    weatherMeasurement: {
+      subscribe: () => pubsub.asyncIterator(topics.NEW_WEATHER_MEASUREMENT_TOPIC),
+    },
+    emissionMeasurement: {
+      subscribe: () => pubsub.asyncIterator(topics.NEW_EMISSION_MEASUREMENT_TOPIC),
+    },
+    soundMeasurement: {
+      subscribe: () => pubsub.asyncIterator(topics.NEW_SOUND_MEASUREMENT_TOPIC),
     },
   },
 };

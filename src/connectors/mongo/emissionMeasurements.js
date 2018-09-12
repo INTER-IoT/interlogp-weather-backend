@@ -27,7 +27,9 @@ EmissionMeasurements.lastMeasurementsByPort = async portId => (await EmissionSta
 
 EmissionMeasurements.saveNewMeasurement = async (measurement) => {
   console.log('saving...');
+  [measurement.emissionStation] = (await EmissionStations.stations());
   console.log(measurement);
+  return measurement;
 };
 
 export default EmissionMeasurements;

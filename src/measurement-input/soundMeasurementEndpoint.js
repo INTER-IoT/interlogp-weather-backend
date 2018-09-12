@@ -4,9 +4,9 @@ import { pubsub, topics } from '../pubsub';
 
 export default async (req, res) => {
   try {
-    let measurement = await soundParser.parse(req.body);
+    let measurement = (await soundParser.parse(req.body));
     measurement = await SoundMeasurements.saveNewMeasurement(measurement); // gets populated
-    pubsub.publish(topics.NEW_MEASUREMENT_TOPIC, { newMeasurement: measurement });
+    pubsub.publish(topics.NEW_SOUND_MEASUREMENT_TOPIC, { soundMeasurement: measurement });
     res.send('ok');
   } catch (error) {
     console.log(error);
