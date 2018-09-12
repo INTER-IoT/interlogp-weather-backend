@@ -1,37 +1,39 @@
+import { SoundMeasurementModel, SoundStationModel } from './models';
 import SoundStations from './soundStations';
 
 const SoundMeasurements = {};
 
-const dummyMeasurement = (station) => {
-  const start = new Date();
-  const end = new Date(start);
-  end.setSeconds(end.getSeconds() + 30);
-  return {
-    id: station.id,
-    start,
-    end,
-    maxLevel: 10,
-    minLevel: 4,
-    avgLevel: 7,
-    soundStation: station,
-  };
+SoundMeasurements.measurements = () => SoundMeasurementModel.find().populate('soundStation');
+
+SoundMeasurements.measurementsByStation = async (soundStationId) => {
+  const soundMeasurements = await SoundMeasurementModel.find().populate({
+    path: 'soundStation',
+    match: {
+      id: soundStationId,
+    },
+  });
+  return soundMeasurements.filter(soundMeasurement => soundMeasurement.soundStation !== null);
 };
 
-SoundMeasurements.measurements = async () => (await SoundStations.stations()).map(dummyMeasurement);
-
-SoundMeasurements.measurementsByStation = async (soundtationId) => {
-  const station = (await SoundStations.stations()).find(st => st.id === soundtationId);
-  return [dummyMeasurement(station)];
+SoundMeasurements.lastMeasurementByStation = async (soundStationId) => {
+  const soundMeasurements = await SoundMeasurements.measurementsByStation(soundStationId);
+  return soundMeasurements.sort((a, b) => a.date - b.date)[0];
 };
 
-SoundMeasurements.lastMeasurementByStation = async soundStationId => (await SoundMeasurements.measurementsByStation(soundStationId))[0];
-
-SoundMeasurements.lastMeasurementsByPort = async portId => (await SoundStations.stationsByPort(portId)).map(dummyMeasurement);
+SoundMeasurements.lastMeasurementsByPort = async (portId) => {
+  const soundStations = await SoundStations.stationsByPort(portId);
+  const measurements = await Promise.all(soundStations.map(soundStation => SoundMeasurements.lastMeasurementByStation(soundStation.id)));
+  return measurements.reduce((agg, item) => {
+    if (item !== undefined && item !== null) agg.push(item);
+    return agg;
+  }, []);
+};
 
 SoundMeasurements.saveNewMeasurement = async (measurement) => {
-  console.log('saving...');
-  [measurement.soundStation] = (await SoundStations.stations());
-  console.log(measurement);
+  console.log(measurement.stationId);
+  measurement.soundStation = await SoundStationModel.findOne({ id: measurement.stationId });
+  console.log(measurement.soundStation);
+  await new SoundMeasurementModel(measurement).save();
   return measurement;
 };
 

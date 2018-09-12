@@ -44,6 +44,12 @@ const matchItems = [
     key: 'minLevel',
     p: typeParsers.int,
   },
+  {
+    typeMatch: ['InterIoT:LogVPmod#SoundMeasurement', 'sosa:Observation'],
+    path: ['sosa:madeBySensor', '@id'],
+    key: 'stationId',
+    p: o => typeParsers.int(o.substring(o.lastIndexOf('/') + 1)),
+  },
 ];
 
 export default {

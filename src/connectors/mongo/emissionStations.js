@@ -1,23 +1,17 @@
-// import { WeatherStationModel } from './models';
-import Ports from './ports';
+import { EmissionStationModel } from './models';
 
 const EmissionStations = {};
 
-EmissionStations.stations = async () => (await Ports.ports()).map(port => ({
-  id: port.id,
-  position: port.position,
-  port,
-  name: `${port.name} emission station`,
-}));
+EmissionStations.stations = () => EmissionStationModel.find().populate('port');
 
 EmissionStations.stationsByPort = async (portId) => {
-  const port = await Ports.port(portId);
-  return {
-    id: port.id,
-    position: port.position,
-    port,
-    name: `${port.name} emission station`,
-  };
+  const emissionStations = await EmissionStationModel.find().populate({
+    path: 'port',
+    match: {
+      id: portId,
+    },
+  });
+  return emissionStations.filter(emissionStation => emissionStation.port !== null);
 };
 
 export default EmissionStations;

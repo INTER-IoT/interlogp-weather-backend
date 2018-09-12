@@ -1,34 +1,38 @@
+import { EmissionMeasurementModel, EmissionStationModel } from './models';
 import EmissionStations from './emissionStations';
 
 const EmissionMeasurements = {};
 
-const dummyMeasurement = station => ({
-  id: station.id,
-  date: new Date(),
-  particles: 0.3,
-  nox: 1,
-  so2: 2,
-  no2: 3,
-  no: 4,
-  co: 0.5,
-  emissionStation: station,
-});
-
-EmissionMeasurements.measurements = async () => (await EmissionStations.stations()).map(dummyMeasurement);
+EmissionMeasurements.measurements = () => EmissionMeasurementModel.find().populate('emissionStation');
 
 EmissionMeasurements.measurementsByStation = async (emissionStationId) => {
-  const station = (await EmissionStations.stations()).find(st => st.id === emissionStationId);
-  return [dummyMeasurement(station)];
+  const emissionMeasurements = await EmissionMeasurementModel.find().populate({
+    path: 'emissionStation',
+    match: {
+      id: emissionStationId,
+    },
+  });
+  return emissionMeasurements.filter(emissionMeasurement => emissionMeasurement.emissionStation !== null);
 };
 
-EmissionMeasurements.lastMeasurementByStation = async emissionStationId => (await EmissionMeasurements.measurementsByStation(emissionStationId))[0];
+EmissionMeasurements.lastMeasurementByStation = async (emissionStationId) => {
+  const emissionMeasurements = await EmissionMeasurements.measurementsByStation(emissionStationId);
+  return emissionMeasurements.sort((a, b) => b.date - a.date)[0];
+};
 
-EmissionMeasurements.lastMeasurementsByPort = async portId => (await EmissionStations.stationsByPort(portId)).map(dummyMeasurement);
+EmissionMeasurements.lastMeasurementsByPort = async (portId) => {
+  const emissionStations = await EmissionStations.stationsByPort(portId);
+  const measurements = await Promise.all(emissionStations.map(emissionStation => EmissionMeasurements.lastMeasurementByStation(emissionStation.id)));
+
+  return measurements.reduce((agg, item) => {
+    if (item !== undefined && item !== null) agg.push(item);
+    return agg;
+  }, []);
+};
 
 EmissionMeasurements.saveNewMeasurement = async (measurement) => {
-  console.log('saving...');
-  [measurement.emissionStation] = (await EmissionStations.stations());
-  console.log(measurement);
+  measurement.emissionStation = await EmissionStationModel.findOne({ id: measurement.stationId });
+  await new EmissionMeasurementModel(measurement).save();
   return measurement;
 };
 
