@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { createServer } from 'http';
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
+import morgan from 'morgan';
 
 // Subs
 import { execute, subscribe } from 'graphql';
@@ -24,10 +25,12 @@ const STATIC_FILE_PATH = '/static';
 
 const app = express();
 
+app.use(morgan('common'));
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.text());
 
 app.use('/', express.static(`${__dirname}${STATIC_FILE_PATH}`));
 

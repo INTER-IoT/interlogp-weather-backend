@@ -5,7 +5,7 @@ export default {
     database: 'environment',
   },
   server: {
-    port: 3020,
+    port: 8080,
   },
   dev: true,
 };
