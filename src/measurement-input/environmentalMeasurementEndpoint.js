@@ -11,6 +11,12 @@ const getMiddleware = type => ({
 
 export default async (req, res) => {
   try {
+    const contentType = req.header('content-type');
+    console.log('--- START REQUEST LOG ---')
+    console.log(`Request content-type: ${contentType}`);
+    console.log('Request body: ');
+    console.log(req.body);
+    console.log('--- END REQUEST LOG ---');
     const typeArray = flatenize(req.body)
       .map(item => item['@type'])
       .find(item => item.indexOf('sosa:Observation') !== -1)
