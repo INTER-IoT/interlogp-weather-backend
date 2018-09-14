@@ -11,6 +11,7 @@ import {
   WeatherMeasurementModel,
   EmissionMeasurementModel,
   SoundMeasurementModel,
+  AlertModel,
 } from '../src/connectors/mongo/models';
 
 import portData from './data/ports';
@@ -43,12 +44,14 @@ const run = async () => {
   await WeatherMeasurementModel.remove({});
   await EmissionMeasurementModel.remove({});
   await SoundMeasurementModel.remove({});
+  await AlertModel.remove({});
   process.stdout.write('done\n');
 
   process.stdout.write('Saving counters...');
   await new CounterModel({ _id: 'weatherCounter' }).save();
   await new CounterModel({ _id: 'emissionCounter' }).save();
   await new CounterModel({ _id: 'soundCounter' }).save();
+  await new CounterModel({ _id: 'alertCounter' }).save();
   process.stdout.write('done\n');
 
   process.stdout.write('Saving ports...');

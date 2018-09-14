@@ -30,9 +30,7 @@ SoundMeasurements.lastMeasurementsByPort = async (portId) => {
 };
 
 SoundMeasurements.saveNewMeasurement = async (measurement) => {
-  console.log(measurement.stationId);
   measurement.soundStation = await SoundStationModel.findOne({ id: measurement.stationId });
-  console.log(measurement.soundStation);
   await new SoundMeasurementModel(measurement).save();
   return measurement;
 };

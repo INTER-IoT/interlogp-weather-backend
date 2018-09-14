@@ -8,6 +8,7 @@ import EmissionStations from './emissionStations';
 import EmissionMeasurements from './emissionMeasurements';
 import SoundStations from './soundStations';
 import SoundMeasurements from './soundMeasurements';
+import Alerts from './alerts';
 
 const mongo = {};
 
@@ -41,6 +42,7 @@ export {
   EmissionMeasurements,
   SoundStations,
   SoundMeasurements,
+  Alerts,
 };
 
 export default {
@@ -51,4 +53,5 @@ export default {
   EmissionMeasurements,
   SoundStations,
   SoundMeasurements,
+  Alerts,
 };

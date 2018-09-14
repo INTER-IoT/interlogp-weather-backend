@@ -1,7 +1,9 @@
 /* eslint no-unused-vars: off */
 
 import { makeExecutableSchema } from 'graphql-tools';
+import { withFilter } from 'graphql-subscriptions';
 import { pubsub, topics } from './pubsub';
+
 
 // import { PubSub, withFilter } from 'graphql-subscriptions';
 
@@ -15,6 +17,7 @@ import {
   EmissionMeasurements,
   SoundStations,
   SoundMeasurements,
+  Alerts,
 } from './connectors';
 
 const typeDefs = [`
@@ -88,6 +91,15 @@ const typeDefs = [`
     soundStation: SoundStation!
   }
 
+  type Alert {
+    id: Int!
+    date: String!
+    processed: Boolean!
+    text: String!
+    dateProcessed: String
+    port: Port!
+  }
+
   type Query {
     ports: [Port]
 
@@ -106,17 +118,26 @@ const typeDefs = [`
     lastSoundMeasurementByStation(soundStationId: Int!): SoundMeasurement
     lastSoundMeasurementsByPort(portId: Int!): [SoundMeasurement]
 
+    alerts(portId: Int, processed: Boolean): [Alert]
+  }
+
+  type Mutation {
+    processAlert(alertId: Int!): Alert
+    createAlert(portId: Int!, text: String!): Alert
   }
 
   type Subscription {
     weatherMeasurement: WeatherMeasurement
     emissionMeasurement: EmissionMeasurement
     soundMeasurement: SoundMeasurement
+    newAlert: Alert
+    processedAlert(portId: Int): Alert
   }
 
   schema {
     query: Query
     subscription: Subscription
+    mutation: Mutation
   }
 
 `];
@@ -171,6 +192,27 @@ const resolvers = {
     lastSoundMeasurementsByPort(root, { portId }, context) {
       return SoundMeasurements.lastMeasurementsByPort(portId);
     },
+    // alert queries
+    alerts(root, { portId, processed }, context) {
+      const filter = {};
+      if (processed !== undefined) {
+        filter.processed = processed;
+      }
+      if (portId !== undefined) return Alerts.alertsByPort(portId, filter);
+      return Alerts.alerts(filter);
+    },
+  },
+  Mutation: {
+    async processAlert(root, { alertId }, context) {
+      const { alert, modified } = await Alerts.processAlert(alertId);
+      if (modified) pubsub.publish(topics.PROCESSED_ALERT_TOPIC, { processedAlert: alert });
+      return alert;
+    },
+    async createAlert(root, { portId, text }, context) {
+      const alert = Alerts.createAlert(portId, text);
+      pubsub.publish(topics.NEW_ALERT_TOPIC, { newAlert: alert });
+      return alert;
+    },
   },
   Subscription: {
     weatherMeasurement: {
@@ -181,6 +223,13 @@ const resolvers = {
     },
     soundMeasurement: {
       subscribe: () => pubsub.asyncIterator(topics.NEW_SOUND_MEASUREMENT_TOPIC),
+    },
+    newAlert: {
+      subscribe: () => pubsub.asyncIterator(topics.NEW_ALERT_TOPIC),
+    },
+    processedAlert: {
+      subscribe: withFilter(() => pubsub.asyncIterator(topics.PROCESSED_ALERT_TOPIC),
+        (payload, variables) => payload.processedAlert.port.id === variables.portId),
     },
   },
 };

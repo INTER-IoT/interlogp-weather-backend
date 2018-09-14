@@ -6,6 +6,7 @@ import WeatherMeasurementModel from './weatherMeasurementModel';
 import EmissionMeasurementModel from './emissionMeasurementModel';
 import SoundMeasurementModel from './soundMeasurementModel';
 import CounterModel from './counterModel';
+import AlertModel from './alertModel';
 
 export {
   PortModel,
@@ -16,6 +17,7 @@ export {
   EmissionMeasurementModel,
   SoundMeasurementModel,
   CounterModel,
+  AlertModel,
 };
 
 export default {
@@ -27,4 +29,5 @@ export default {
   EmissionMeasurementModel,
   SoundMeasurementModel,
   CounterModel,
+  AlertModel,
 };

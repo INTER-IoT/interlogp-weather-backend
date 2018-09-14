@@ -30,7 +30,6 @@ app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.text());
 
 app.use('/', express.static(`${__dirname}${STATIC_FILE_PATH}`));
 
@@ -43,7 +42,8 @@ if (config.dev) {
   }));
 }
 
-app.use(MEASUREMENTS_PATH, measurementInputApp);
+// ignore content-type and always treat as json body
+app.use(MEASUREMENTS_PATH, bodyParser.json({ type: () => true }), measurementInputApp);
 
 const server = createServer(app);
 
@@ -64,25 +64,3 @@ SubscriptionServer.create(
     path: SUBSCRIPTIONS_PATH,
   },
 );
-
-
-const stopHandler = async () => {
-  console.log('Stopping...');
-
-  const timeoutId = setTimeout(() => {
-    process.exit(1);
-    console.error('Stopped forcefully, not all connection was closed');
-  }, 2000);
-
-  try {
-    await server.close();
-    clearTimeout(timeoutId);
-  } catch (error) {
-    console.error(error, 'Error during stop.');
-    process.exit(1);
-  }
-};
-
-process.on('SIGTERM', stopHandler);
-process.on('SIGINT', stopHandler);
-process.on('SIGHUP', stopHandler);
