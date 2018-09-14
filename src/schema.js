@@ -130,7 +130,7 @@ const typeDefs = [`
     weatherMeasurement: WeatherMeasurement
     emissionMeasurement: EmissionMeasurement
     soundMeasurement: SoundMeasurement
-    newAlert: Alert
+    newAlert(portId: Int): Alert
     processedAlert(portId: Int): Alert
   }
 
@@ -209,7 +209,7 @@ const resolvers = {
       return alert;
     },
     async createAlert(root, { portId, text }, context) {
-      const alert = Alerts.createAlert(portId, text);
+      const alert = await Alerts.createAlert(portId, text);
       pubsub.publish(topics.NEW_ALERT_TOPIC, { newAlert: alert });
       return alert;
     },
@@ -225,11 +225,23 @@ const resolvers = {
       subscribe: () => pubsub.asyncIterator(topics.NEW_SOUND_MEASUREMENT_TOPIC),
     },
     newAlert: {
-      subscribe: () => pubsub.asyncIterator(topics.NEW_ALERT_TOPIC),
+      // subscribe: () => pubsub.asyncIterator(topics.NEW_ALERT_TOPIC),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(topics.NEW_ALERT_TOPIC),
+        (payload, variables) => {
+          if (variables.portId === undefined) return true;
+          return payload.newAlert.port.id === variables.portId;
+        },
+      ),
     },
     processedAlert: {
-      subscribe: withFilter(() => pubsub.asyncIterator(topics.PROCESSED_ALERT_TOPIC),
-        (payload, variables) => payload.processedAlert.port.id === variables.portId),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(topics.PROCESSED_ALERT_TOPIC),
+        (payload, variables) => {
+          if (variables.portId === undefined) return true;
+          return payload.processedAlert.port.id === variables.portId;
+        },
+      ),
     },
   },
 };
