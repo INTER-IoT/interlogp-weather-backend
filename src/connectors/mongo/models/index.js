@@ -7,6 +7,7 @@ import EmissionMeasurementModel from './emissionMeasurementModel';
 import SoundMeasurementModel from './soundMeasurementModel';
 import CounterModel from './counterModel';
 import AlertModel from './alertModel';
+import IntermwMessageModel from './intermwMessageModel';
 
 export {
   PortModel,
@@ -18,6 +19,7 @@ export {
   SoundMeasurementModel,
   CounterModel,
   AlertModel,
+  IntermwMessageModel,
 };
 
 export default {
@@ -30,4 +32,5 @@ export default {
   SoundMeasurementModel,
   CounterModel,
   AlertModel,
+  IntermwMessageModel,
 };

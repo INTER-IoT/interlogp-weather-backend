@@ -1,4 +1,4 @@
-import { SoundMeasurements } from '../connectors/mongo';
+import { SoundMeasurements, IntermwMessages } from '../connectors/mongo';
 import { soundParser } from '../parsers';
 import { pubsub, topics } from '../pubsub';
 
@@ -6,6 +6,7 @@ export default async (req, res) => {
   try {
     let measurement = (await soundParser.parse(req.body));
     measurement = await SoundMeasurements.saveNewMeasurement(measurement); // gets populated
+    await IntermwMessages.saveNewMessage(req.body, measurement.date, measurement.soundStation._id, 'sound'); // eslint-disable-line no-underscore-dangle
     pubsub.publish(topics.NEW_SOUND_MEASUREMENT_TOPIC, { soundMeasurement: measurement });
     res.send('ok');
   } catch (error) {

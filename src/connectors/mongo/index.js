@@ -9,6 +9,7 @@ import EmissionMeasurements from './emissionMeasurements';
 import SoundStations from './soundStations';
 import SoundMeasurements from './soundMeasurements';
 import Alerts from './alerts';
+import IntermwMessages from './intermwMessages';
 
 const mongo = {};
 
@@ -43,6 +44,7 @@ export {
   SoundStations,
   SoundMeasurements,
   Alerts,
+  IntermwMessages,
 };
 
 export default {
@@ -54,4 +56,5 @@ export default {
   SoundStations,
   SoundMeasurements,
   Alerts,
+  IntermwMessages,
 };

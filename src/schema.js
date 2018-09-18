@@ -18,6 +18,7 @@ import {
   SoundStations,
   SoundMeasurements,
   Alerts,
+  IntermwMessages,
 } from './connectors';
 
 const typeDefs = [`
@@ -100,6 +101,14 @@ const typeDefs = [`
     port: Port!
   }
 
+  type IntermwMessage {
+    date: String!
+    content: String!
+    weatherStation: WeatherStation
+    emissionStation: EmissionStation
+    soundStation: SoundStation
+  }
+
   type Query {
     ports: [Port]
 
@@ -119,6 +128,8 @@ const typeDefs = [`
     lastSoundMeasurementsByPort(portId: Int!): [SoundMeasurement]
 
     alerts(portId: Int, processed: Boolean): [Alert]
+
+    intermwMessages(portId: Int): [IntermwMessage]
   }
 
   type Mutation {
@@ -200,6 +211,11 @@ const resolvers = {
       }
       if (portId !== undefined) return Alerts.alertsByPort(portId, filter);
       return Alerts.alerts(filter);
+    },
+    // intermw messages
+    intermwMessages(root, { portId }, context) {
+      if (portId !== undefined) return IntermwMessages.messagesByPort(portId);
+      return IntermwMessages.messages();
     },
   },
   Mutation: {
