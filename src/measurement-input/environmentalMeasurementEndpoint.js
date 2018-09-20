@@ -3,20 +3,20 @@ import weatherMeasurementEndpoint from './weatherMeasurementEndpoint';
 import soundMeasurementEndpoint from './soundMeasurementEndpoint';
 import emissionMeasurementEndpoint from './emissionMeasurementEndpoint';
 
-const getMiddleware = type => ({
-  'InterIoT:LogVPmod#WeatherMeasurment': weatherMeasurementEndpoint,
+const typeMiddlewares = {
+  'InterIoT:LogVPmod#WeatherMeasurement': weatherMeasurementEndpoint,
   'InterIoT:LogVPmod#EmmissionMeasurement': emissionMeasurementEndpoint,
   'InterIoT:LogVPmod#SoundMeasurement': soundMeasurementEndpoint,
-})[type];
+};
 
 export default async (req, res) => {
   try {
     const typeArray = flatenize(req.body)
       .map(item => item['@type'])
-      .find(item => item.indexOf('sosa:Observation') !== -1)
+      .reduce((agg, types) => [...agg, ...types], [])
       .slice(); // slice will clone the instance
-    typeArray.splice(typeArray.indexOf('sosa:Observation'), 1);
-    const middleware = getMiddleware(typeArray[0]);
+    const middlewareType = Object.keys(typeMiddlewares).find(type => typeArray.indexOf(type) > -1);
+    const middleware = typeMiddlewares[middlewareType];
     middleware(req, res);
   } catch (error) {
     console.log(error);

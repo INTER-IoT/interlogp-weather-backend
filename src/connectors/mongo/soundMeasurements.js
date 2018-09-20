@@ -32,7 +32,13 @@ SoundMeasurements.lastMeasurementsByPort = async (portId) => {
 SoundMeasurements.saveNewMeasurement = async (measurement) => {
   measurement.soundStation = await SoundStationModel.findOne({ id: measurement.stationId });
   await new SoundMeasurementModel(measurement).save();
-  return measurement;
+  const populatedMeasurement = await SoundMeasurementModel.populate(measurement, {
+    path: 'soundStation',
+    populate: {
+      path: 'port',
+    },
+  });
+  return populatedMeasurement;
 };
 
 export default SoundMeasurements;

@@ -4,14 +4,14 @@ const extractTimestampFromId = (id, items) => typeParsers.date(items.find(item =
 
 const matchItems = [
   {
-    typeMatch: ['Observation', 'meta'],
-    path: 'dateTimeStamp',
+    typeMatch: ['msg:Observation', 'msg:meta'],
+    path: 'msg:dateTimeStamp',
     key: ['meta', 'messageTimestamp'],
     p: typeParsers.date,
   },
   {
-    typeMatch: ['Observation', 'meta'],
-    path: 'messageID',
+    typeMatch: ['msg:Observation', 'msg:meta'],
+    path: 'msg:messageID',
     key: ['meta', 'messageID'],
   },
   {

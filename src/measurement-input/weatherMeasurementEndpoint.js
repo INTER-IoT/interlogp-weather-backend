@@ -6,8 +6,9 @@ export default async (req, res) => {
   try {
     let measurement = await weatherParser.parse(req.body);
     measurement = await WeatherMeasurements.saveNewMeasurement(measurement); // gets populated
-    await IntermwMessages.saveNewMessage(req.body, measurement.date, measurement.weatherStation._id, 'weather'); // eslint-disable-line no-underscore-dangle
-    pubsub.publish(topics.NEW_WEATHER_MEASUREMENT_TOPIC, { weatherMeasurement: measurement });
+    const intermwMessage = await IntermwMessages.saveNewMessage(req.body, measurement.date, measurement.weatherStation._id, 'weather'); // eslint-disable-line no-underscore-dangle
+    pubsub.publish(topics.NEW_INTERMW_MESSAGE_TOPIC, { newIntermwMessage: intermwMessage });
+    pubsub.publish(topics.NEW_WEATHER_MEASUREMENT_TOPIC, { newWeatherMeasurement: measurement });
     res.send('ok');
   } catch (error) {
     console.log(error);

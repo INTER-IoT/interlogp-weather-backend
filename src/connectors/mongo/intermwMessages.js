@@ -32,25 +32,26 @@ IntermwMessages.messagesByPort = async (portId) => {
   });
 };
 
+IntermwMessages.getStationByType = type => ({
+  weather: 'weatherStation',
+  emission: 'emissionStation',
+  sound: 'soundStation',
+})[type];
+
 IntermwMessages.saveNewMessage = async (body, date, stationId, type) => {
   const intermwMessage = {
     content: Buffer.from(JSON.stringify(body)).toString('base64'),
     date,
   };
-  switch (type) {
-    case 'weather':
-      intermwMessage.weatherStation = stationId;
-      break;
-    case 'emission':
-      intermwMessage.emissionStation = stationId;
-      break;
-    case 'sound':
-      intermwMessage.soundStation = stationId;
-      break;
-    default:
-      throw new Error(`Unexpected type: ${type}`);
-  }
+  intermwMessage[IntermwMessages.getStationByType(type)] = stationId;
   await new IntermwMessageModel(intermwMessage).save();
+  const message = await IntermwMessageModel.populate(intermwMessage, {
+    path: IntermwMessages.getStationByType(type),
+    populate: {
+      path: 'port',
+    },
+  });
+  return message;
 };
 
 export default IntermwMessages;

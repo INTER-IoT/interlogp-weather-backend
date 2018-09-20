@@ -2,18 +2,18 @@ import { parser, typeParsers } from './interiotMessageParser';
 
 const matchItems = [
   {
-    typeMatch: ['Observation', 'meta'],
-    path: 'dateTimeStamp',
+    typeMatch: ['msg:Observation', 'msg:meta'],
+    path: 'msg:dateTimeStamp',
     key: ['meta', 'messageTimestamp'],
     p: typeParsers.date,
   },
   {
-    typeMatch: ['Observation', 'meta'],
-    path: 'messageID',
+    typeMatch: ['msg:Observation', 'msg:meta'],
+    path: 'msg:messageID',
     key: ['meta', 'messageID'],
   },
   {
-    typeMatch: ['InterIoT:LogVPmod#WeatherMeasurment', 'sosa:Observation'],
+    typeMatch: ['InterIoT:LogVPmod#WeatherMeasurement', 'sosa:Observation'],
     path: ['sosa:resultTime', '@value'],
     key: 'date',
     p: typeParsers.date,

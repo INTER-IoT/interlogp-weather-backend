@@ -2,14 +2,14 @@ import { parser, typeParsers } from './interiotMessageParser';
 
 const matchItems = [
   {
-    typeMatch: ['Observation', 'meta'],
-    path: 'dateTimeStamp',
+    typeMatch: ['msg:Observation', 'msg:meta'],
+    path: 'msg:dateTimeStamp',
     key: ['meta', 'messageTimestamp'],
     p: typeParsers.date,
   },
   {
-    typeMatch: ['Observation', 'meta'],
-    path: 'messageID',
+    typeMatch: ['msg:Observation', 'msg:meta'],
+    path: 'msg:messageID',
     key: ['meta', 'messageID'],
   },
   {
@@ -19,37 +19,37 @@ const matchItems = [
     p: typeParsers.date,
   },
   {
-    typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#Emission_NOX'],
+    typeMatch: ['sosa:Observation', 'InterIoT:LogVPmod#Emission_NOX'],
     path: ['iiot:hasResultValue', '@value'],
     key: 'nox',
     p: typeParsers.int,
   },
   {
-    typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#ParticlesConcentration'],
+    typeMatch: ['sosa:Observation', 'InterIoT:LogVPmod#ParticlesConcentration'],
     path: ['iiot:hasResultValue', '@value'],
     key: 'particles',
     p: typeParsers.float,
   },
   {
-    typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#Emission_SO2'],
+    typeMatch: ['sosa:Observation', 'InterIoT:LogVPmod#Emission_SO2'],
     path: ['iiot:hasResultValue', '@value'],
     key: 'so2',
     p: typeParsers.int,
   },
   {
-    typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#Emission_NO2'],
+    typeMatch: ['sosa:Observation', 'InterIoT:LogVPmod#Emission_NO2'],
     path: ['iiot:hasResultValue', '@value'],
     key: 'no2',
     p: typeParsers.int,
   },
   {
-    typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#Emission_NO'],
+    typeMatch: ['sosa:Observation', 'InterIoT:LogVPmod#Emission_NO'],
     path: ['iiot:hasResultValue', '@value'],
     key: 'no',
     p: typeParsers.int,
   },
   {
-    typeMatch: ['sosa:Result', 'InterIoT:LogVPmod#Emission_CO'],
+    typeMatch: ['sosa:Observation', 'InterIoT:LogVPmod#Emission_CO'],
     path: ['iiot:hasResultValue', '@value'],
     key: 'co',
     p: typeParsers.float,

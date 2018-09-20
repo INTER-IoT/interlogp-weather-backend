@@ -11,6 +11,19 @@ const compareFlatUnsortedArray = (a1, a2) => {
   return true;
 };
 
+// mazo hate
+const adaptToPreviousVersion = (graph) => {
+  const newTypeKey = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+  if (graph[newTypeKey] && !graph['@type']) {
+    const newType = graph[newTypeKey];
+    if (Array.isArray(newType)) graph['@type'] = newType.map(newtype => newtype['@id']);
+    else if (typeof newType === 'object') graph['@type'] = newType['@id'];
+    else graph['@type'] = newType;
+    delete graph[newTypeKey];
+  }
+  return graph;
+};
+
 const flatenize = (message, items) => {
   items = items || [];
   Object.keys(message).forEach((key) => {
@@ -18,6 +31,7 @@ const flatenize = (message, items) => {
       message['@graph'].forEach(subMessage => flatenize(subMessage, items));
     }
   });
+  message = adaptToPreviousVersion(message);
   if (message['@type']) items.push(message);
   return items;
 };
@@ -57,10 +71,12 @@ export {
   parser,
   typeParsers,
   flatenize,
+  compareFlatUnsortedArray,
 };
 
 export default {
   parser,
   typeParsers,
   flatenize,
+  compareFlatUnsortedArray,
 };

@@ -6,8 +6,9 @@ export default async (req, res) => {
   try {
     let measurement = await emissionParser.parse(req.body);
     measurement = await EmissionMeasurements.saveNewMeasurement(measurement); // gets populated
-    await IntermwMessages.saveNewMessage(req.body, measurement.date, measurement.emissionStation._id, 'emission'); // eslint-disable-line no-underscore-dangle
-    pubsub.publish(topics.NEW_EMISSION_MEASUREMENT_TOPIC, { emissionMeasurement: measurement });
+    const intermwMessage = await IntermwMessages.saveNewMessage(req.body, measurement.date, measurement.emissionStation._id, 'emission'); // eslint-disable-line no-underscore-dangle
+    pubsub.publish(topics.NEW_INTERMW_MESSAGE_TOPIC, { newIntermwMessage: intermwMessage });
+    pubsub.publish(topics.NEW_EMISSION_MEASUREMENT_TOPIC, { newEmissionMeasurement: measurement });
     res.send('ok');
   } catch (error) {
     console.log(error);

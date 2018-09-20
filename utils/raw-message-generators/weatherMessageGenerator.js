@@ -9,181 +9,231 @@ const generate = (stationId, size, date) => fakeData.generateWeatherMeasurements
     return measurement;
   })
   .map(measurement => `{
-    "@graph": [
-      {
-        "@graph": [
-          {
-            "@id": "InterIoT:message/meta/be4209e0-3592-4339-9aa4-1fedfcce071d",
-            "@type": [
-              "Observation",
-              "meta"
-            ],
-            "SenderPlatformId": {
-              "@id": "http://www.inter-iot.eu/wso2port"
+  "@graph": [
+    {
+      "@graph": [
+        {
+          "@id": "msg:meta/5ec99e2c-30df-457b-b2b3-5b44d38aa0ca",
+          "msg:SenderPlatformId": {
+            "@id": "http://www.inter-iot.eu/wso2port"
+          },
+          "msg:conversationID": "conv38660fe1-5e11-4917-9755-d7e91cf900b6",
+          "msg:dateTimeStamp": "${measurement.messageDate.toISOString()}",
+          "msg:messageID": "msg634cf15f-8551-460f-a473-39d4a531f3dd",
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "msg:Observation"
             },
-            "conversationID": "conv2179ae6c-62e3-46b8-bdcd-2c305126c57c",
-            "dateTimeStamp": "${measurement.messageDate.toISOString()}",
-            "messageID": "msg1967dd28-5a9c-4bde-a4a5-d420c408e2ad"
-          }
-        ],
-        "@id": "InterIoT:message/metadata"
-      },
-      {
-        "@graph": [
-          {
-            "@id": "_:b0",
-            "@type": [
-              "sosa:Result",
-              "InterIoT:LogVPmod#Precipitation"
-            ],
-            "iiot:hasResultValue": {
-              "@type": "http://www.w3.org/2001/XMLSchema#float",
-              "@value": "${measurement.precipitation}"
+            {
+              "@id": "msg:meta"
             }
+          ]
+        }
+      ],
+      "@id": "msg:metadata"
+    },
+    {
+      "@graph": [
+        {
+          "@id": "_:b0",
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "${measurement.pressure}"
           },
-          {
-            "@id": "_:b1",
-            "@type": [
-              "InterIoT:LogVPmod#WeatherMeasurment",
-              "sosa:Observation"
-            ],
-            "sosa:hasResult": [
-              {
-                "@id": "_:b2"
-              },
-              {
-                "@id": "_:b3"
-              },
-              {
-                "@id": "_:b4"
-              },
-              {
-                "@id": "_:b0"
-              },
-              {
-                "@id": "_:b5"
-              },
-              {
-                "@id": "_:b6"
-              },
-              {
-                "@id": "_:b7"
-              },
-              {
-                "@id": "_:b8"
-              }
-            ],
-            "sosa:madeBySensor": {
-              "@id": "http://www.inter-iot.eu/wso2port/weather/stations/${stationId}"
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "sosa:Result"
             },
-            "sosa:resultTime": {
-              "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-              "@value": "${measurement.date.toISOString()}"
+            {
+              "@id": "InterIoT:LogVPmod#Pressure"
             }
+          ]
+        },
+        {
+          "@id": "_:b1",
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "${measurement.windspeed}"
           },
-          {
-            "@id": "_:b2",
-            "@type": [
-              "sosa:Result",
-              "InterIoT:LogVPmod#WindSpeed"
-            ],
-            "iiot:hasResultValue": {
-              "@type": "http://www.w3.org/2001/XMLSchema#float",
-              "@value": "${measurement.windSpeed}"
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "sosa:Result"
+            },
+            {
+              "@id": "InterIoT:LogVPmod#WindSpeed"
             }
+          ]
+        },
+        {
+          "@id": "_:b2",
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "${measurement.averageTemperature}"
           },
-          {
-            "@id": "_:b3",
-            "@type": [
-              "sosa:Result",
-              "InterIoT:LogVPmod#Radiation"
-            ],
-            "iiot:hasResultValue": {
-              "@type": "http://www.w3.org/2001/XMLSchema#float",
-              "@value": "${measurement.solarRadiation}"
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "sosa:Result"
+            },
+            {
+              "@id": "InterIoT:LogVPmod#AverageTemperature"
             }
+          ]
+        },
+        {
+          "@id": "_:b3",
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "${measurement.humidity}"
           },
-          {
-            "@id": "_:b4",
-            "@type": [
-              "sosa:Result",
-              "InterIoT:LogVPmod#Pressure"
-            ],
-            "iiot:hasResultValue": {
-              "@type": "http://www.w3.org/2001/XMLSchema#float",
-              "@value": "${measurement.pressure}"
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "sosa:Result"
+            },
+            {
+              "@id": "InterIoT:LogVPmod#AverageHumidity"
             }
+          ]
+        },
+        {
+          "@id": "_:b4",
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "${measurement.windDirection}"
           },
-          {
-            "@id": "_:b5",
-            "@type": [
-              "sosa:Result",
-              "InterIoT:LogVPmod#AverageHumidity"
-            ],
-            "iiot:hasResultValue": {
-              "@type": "http://www.w3.org/2001/XMLSchema#float",
-              "@value": "${measurement.humidity}"
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "sosa:Result"
+            },
+            {
+              "@id": "InterIoT:LogVPmod#WindDirection"
             }
+          ]
+        },
+        {
+          "@id": "_:b5",
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "${measurement.solarRadiation}"
           },
-          {
-            "@id": "_:b6",
-            "@type": [
-              "sosa:Result",
-              "InterIoT:LogVPmod#SeaTemperature"
-            ],
-            "iiot:hasResultValue": {
-              "@type": "http://www.w3.org/2001/XMLSchema#float",
-              "@value": "${measurement.seaTemperature}"
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "sosa:Result"
+            },
+            {
+              "@id": "InterIoT:LogVPmod#Radiation"
             }
+          ]
+        },
+        {
+          "@id": "_:b6",
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "${measurement.seaTemperature}"
           },
-          {
-            "@id": "_:b7",
-            "@type": [
-              "sosa:Result",
-              "InterIoT:LogVPmod#AverageTemperature"
-            ],
-            "iiot:hasResultValue": {
-              "@type": "http://www.w3.org/2001/XMLSchema#float",
-              "@value": "${measurement.averageTemperature}"
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "sosa:Result"
+            },
+            {
+              "@id": "InterIoT:LogVPmod#SeaTemperature"
             }
+          ]
+        },
+        {
+          "@id": "_:b7",
+          "iiot:hasResultValue": {
+            "@type": "http://www.w3.org/2001/XMLSchema#float",
+            "@value": "${measurement.precipitation}"
           },
-          {
-            "@id": "_:b8",
-            "@type": [
-              "sosa:Result",
-              "InterIoT:LogVPmod#WindDirection"
-            ],
-            "iiot:hasResultValue": {
-              "@type": "http://www.w3.org/2001/XMLSchema#float",
-              "@value": "${measurement.windDirection}"
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "sosa:Result"
+            },
+            {
+              "@id": "InterIoT:LogVPmod#Precipitation"
             }
+          ]
+        },
+        {
+          "@id": "http://www.inter-iot.eu/wso2port/weather/stations/${stationId}",
+          "iiotex:hasLocalId": {
+            "@type": "http://www.w3.org/2001/XMLSchema#int",
+            "@value": "${stationId}"
           },
-          {
-            "@id": "http://www.inter-iot.eu/wso2port/weather/stations/9",
-            "@type": [
-              "sosa:Sensor",
-              "iiot:IoTDevice",
-              "InterIoT:LogVPmod#MeteoStation"
-            ],
-            "iiotex:hasLocalId": {
-              "@type": "http://www.w3.org/2001/XMLSchema#int",
-              "@value": "${stationId}"
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "InterIoT:LogVPmod#MeteoStation"
+            },
+            {
+              "@id": "iiot:IoTDevice"
+            },
+            {
+              "@id": "sosa:Sensor"
             }
+          ]
+        },
+        {
+          "@id": "http://www.inter-iot.eu/wso2port/weather/stations/${stationId}/3181710",
+          "iiotex:hasLocalId": {
+            "@type": "http://www.w3.org/2001/XMLSchema#int",
+            "@value": "3181710"
+          },
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
+            {
+              "@id": "InterIoT:LogVPmod#WeatherMeasurement"
+            },
+            {
+              "@id": "sosa:Observation"
+            }
+          ],
+          "sosa:hasResult": [
+            {
+              "@id": "_:b3"
+            },
+            {
+              "@id": "_:b6"
+            },
+            {
+              "@id": "_:b4"
+            },
+            {
+              "@id": "_:b2"
+            },
+            {
+              "@id": "_:b1"
+            },
+            {
+              "@id": "_:b5"
+            },
+            {
+              "@id": "_:b0"
+            },
+            {
+              "@id": "_:b7"
+            }
+          ],
+          "sosa:madeBySensor": {
+            "@id": "http://www.inter-iot.eu/wso2port/weather/stations/${stationId}"
+          },
+          "sosa:resultTime": {
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+            "@value": "${measurement.date.toISOString()}"
           }
-        ],
-        "@id": "InterIoT:message/payload"
-      }
-    ],
-    "@context": {
-      "@vocab": "http://inter-iot.eu/message/",
-      "iiotex": "http://inter-iot.eu/GOIoTPex#",
-      "geosparql": "http://www.opengis.net/ont/geosparql#",
-      "iiot": "http://inter-iot.eu/GOIoTP#",
-      "InterIoT": "http://inter-iot.eu/",
-      "ssn": "http://www.w3.org/ns/ssn/",
-      "sosa": "http://www.w3.org/ns/sosa/"
+        }
+      ],
+      "@id": "msg:payload"
     }
-  }`);
+  ],
+  "@context": {
+    "msg": "http://inter-iot.eu/message/",
+    "iiotex": "http://inter-iot.eu/GOIoTPex#",
+    "geosparql": "http://www.opengis.net/ont/geosparql#",
+    "iiot": "http://inter-iot.eu/GOIoTP#",
+    "InterIoT": "http://inter-iot.eu/",
+    "ssn": "http://www.w3.org/ns/ssn/",
+    "sosa": "http://www.w3.org/ns/sosa/"
+  }
+}`);
 
 export default {
   generate,

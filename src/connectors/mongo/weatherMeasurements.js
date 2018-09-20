@@ -33,7 +33,13 @@ WeatherMeasurements.lastMeasurementsByPort = async (portId) => {
 WeatherMeasurements.saveNewMeasurement = async (measurement) => {
   measurement.weatherStation = await WeatherStationModel.findOne({ id: measurement.stationId });
   await new WeatherMeasurementModel(measurement).save();
-  return measurement;
+  const populatedMeasurement = await WeatherMeasurementModel.populate(measurement, {
+    path: 'weatherStation',
+    populate: {
+      path: 'port',
+    },
+  });
+  return populatedMeasurement;
 };
 
 export default WeatherMeasurements;

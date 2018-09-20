@@ -138,11 +138,12 @@ const typeDefs = [`
   }
 
   type Subscription {
-    weatherMeasurement: WeatherMeasurement
-    emissionMeasurement: EmissionMeasurement
-    soundMeasurement: SoundMeasurement
+    newWeatherMeasurement(portId: Int): WeatherMeasurement
+    newEmissionMeasurement(portId: Int): EmissionMeasurement
+    newSoundMeasurement(portId: Int): SoundMeasurement
     newAlert(portId: Int): Alert
     processedAlert(portId: Int): Alert
+    newIntermwMessage(portId: Int): IntermwMessage
   }
 
   schema {
@@ -231,14 +232,35 @@ const resolvers = {
     },
   },
   Subscription: {
-    weatherMeasurement: {
-      subscribe: () => pubsub.asyncIterator(topics.NEW_WEATHER_MEASUREMENT_TOPIC),
+    newWeatherMeasurement: {
+      // subscribe: () => pubsub.asyncIterator(topics.NEW_WEATHER_MEASUREMENT_TOPIC),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(topics.NEW_WEATHER_MEASUREMENT_TOPIC),
+        (payload, variables) => {
+          if (variables.portId === undefined) return true;
+          return payload.newWeatherMeasurement.weatherStation.port.id === variables.portId;
+        },
+      ),
     },
-    emissionMeasurement: {
-      subscribe: () => pubsub.asyncIterator(topics.NEW_EMISSION_MEASUREMENT_TOPIC),
+    newEmissionMeasurement: {
+      // subscribe: () => pubsub.asyncIterator(topics.NEW_EMISSION_MEASUREMENT_TOPIC),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(topics.NEW_EMISSION_MEASUREMENT_TOPIC),
+        (payload, variables) => {
+          if (variables.portId === undefined) return true;
+          return payload.newEmissionMeasurement.emissionStation.port.id === variables.portId;
+        },
+      ),
     },
-    soundMeasurement: {
-      subscribe: () => pubsub.asyncIterator(topics.NEW_SOUND_MEASUREMENT_TOPIC),
+    newSoundMeasurement: {
+      // subscribe: () => pubsub.asyncIterator(topics.NEW_SOUND_MEASUREMENT_TOPIC),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(topics.NEW_SOUND_MEASUREMENT_TOPIC),
+        (payload, variables) => {
+          if (variables.portId === undefined) return true;
+          return payload.newSoundMeasurement.soundStation.port.id === variables.portId;
+        },
+      ),
     },
     newAlert: {
       // subscribe: () => pubsub.asyncIterator(topics.NEW_ALERT_TOPIC),
@@ -256,6 +278,17 @@ const resolvers = {
         (payload, variables) => {
           if (variables.portId === undefined) return true;
           return payload.processedAlert.port.id === variables.portId;
+        },
+      ),
+    },
+    newIntermwMessage: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(topics.NEW_INTERMW_MESSAGE_TOPIC),
+        (payload, variables) => {
+          if (variables.portId === undefined) return true;
+          const message = payload.newIntermwMessage;
+          const station = message.weatherStation || message.soundStation || message.emissionStation;
+          return station.port.id === variables.portId;
         },
       ),
     },
