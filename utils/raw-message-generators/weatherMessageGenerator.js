@@ -53,7 +53,7 @@ const generate = (stationId, size, date) => fakeData.generateWeatherMeasurements
           "@id": "_:b1",
           "iiot:hasResultValue": {
             "@type": "http://www.w3.org/2001/XMLSchema#float",
-            "@value": "${measurement.windspeed}"
+            "@value": "${measurement.windSpeed}"
           },
           "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
             {
