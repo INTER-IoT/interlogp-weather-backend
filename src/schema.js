@@ -19,6 +19,7 @@ import {
   SoundMeasurements,
   Alerts,
   IntermwMessages,
+  Rules,
 } from './connectors';
 
 const typeDefs = [`
@@ -101,6 +102,27 @@ const typeDefs = [`
     port: Port!
   }
 
+  type Rule {
+    id: Int!
+    port: [Int]
+    station: [Int]
+    type: String!
+    attribute: String!
+    min: Float!
+    max: Float!
+    inclusive: Boolean!
+  }
+
+  input RuleInput {
+    port: [Int]
+    station: [Int]
+    type: String!
+    attribute: String!
+    comparison: Int!
+    value: Float!
+    inclusive: Boolean!
+  }
+
   type IntermwMessage {
     date: String!
     content: String!
@@ -130,11 +152,15 @@ const typeDefs = [`
     alerts(portId: Int, processed: Boolean): [Alert]
 
     intermwMessages(portId: Int): [IntermwMessage]
+
+    rules: [Rule]
   }
 
   type Mutation {
     processAlert(alertId: Int!): Alert
     createAlert(portId: Int!, text: String!): Alert
+    
+    createRule(rule: RuleInput!): Rule
   }
 
   type Subscription {
@@ -218,6 +244,10 @@ const resolvers = {
       if (portId !== undefined) return IntermwMessages.messagesByPort(portId);
       return IntermwMessages.messages();
     },
+    // rules
+    rules(root, args, context) {
+      return Rules.rules();
+    },
   },
   Mutation: {
     async processAlert(root, { alertId }, context) {
@@ -229,6 +259,10 @@ const resolvers = {
       const alert = await Alerts.createAlert(portId, text);
       pubsub.publish(topics.NEW_ALERT_TOPIC, { newAlert: alert });
       return alert;
+    },
+    async createRule(root, { rule }, context) {
+      const createdRule = await Rules.createRule(rule);
+      return createdRule;
     },
   },
   Subscription: {

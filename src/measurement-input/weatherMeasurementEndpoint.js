@@ -1,6 +1,7 @@
 import { WeatherMeasurements, IntermwMessages } from '../connectors/mongo';
 import { weatherParser } from '../parsers';
 import { pubsub, topics } from '../pubsub';
+import processRules from '../processRules';
 
 export default async (req, res) => {
   try {
@@ -9,6 +10,7 @@ export default async (req, res) => {
     const intermwMessage = await IntermwMessages.saveNewMessage(req.body, measurement.date, measurement.weatherStation._id, 'weather'); // eslint-disable-line no-underscore-dangle
     pubsub.publish(topics.NEW_INTERMW_MESSAGE_TOPIC, { newIntermwMessage: intermwMessage });
     pubsub.publish(topics.NEW_WEATHER_MEASUREMENT_TOPIC, { newWeatherMeasurement: measurement });
+    processRules(measurement, 'weather');
     res.send('ok');
   } catch (error) {
     console.log(error);

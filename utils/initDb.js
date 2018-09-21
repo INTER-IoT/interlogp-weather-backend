@@ -52,6 +52,7 @@ const run = async () => {
   await new CounterModel({ _id: 'emissionCounter' }).save();
   await new CounterModel({ _id: 'soundCounter' }).save();
   await new CounterModel({ _id: 'alertCounter' }).save();
+  await new CounterModel({ _id: 'ruleCounter' }).save();
   process.stdout.write('done\n');
 
   process.stdout.write('Saving ports...');

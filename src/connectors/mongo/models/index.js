@@ -8,6 +8,7 @@ import SoundMeasurementModel from './soundMeasurementModel';
 import CounterModel from './counterModel';
 import AlertModel from './alertModel';
 import IntermwMessageModel from './intermwMessageModel';
+import RuleModel from './ruleModel';
 
 export {
   PortModel,
@@ -20,6 +21,7 @@ export {
   CounterModel,
   AlertModel,
   IntermwMessageModel,
+  RuleModel,
 };
 
 export default {
@@ -33,4 +35,5 @@ export default {
   CounterModel,
   AlertModel,
   IntermwMessageModel,
+  RuleModel,
 };
