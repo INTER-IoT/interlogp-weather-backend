@@ -45,7 +45,7 @@ const generate = (stationId, size, date) => fakeData.generateEmissionMeasurement
               "@id": "InterIoT:LogVPmod#Emission_NO"
             },
             {
-              "@id": "sosa:Observation"
+              "@id": "sosa:Result"
             }
           ]
         },
@@ -60,7 +60,7 @@ const generate = (stationId, size, date) => fakeData.generateEmissionMeasurement
               "@id": "InterIoT:LogVPmod#Emission_NOX"
             },
             {
-              "@id": "sosa:Observation"
+              "@id": "sosa:Result"
             }
           ]
         },
@@ -75,7 +75,7 @@ const generate = (stationId, size, date) => fakeData.generateEmissionMeasurement
               "@id": "InterIoT:LogVPmod#Emission_NO2"
             },
             {
-              "@id": "sosa:Observation"
+              "@id": "sosa:Result"
             }
           ]
         },
@@ -90,7 +90,7 @@ const generate = (stationId, size, date) => fakeData.generateEmissionMeasurement
               "@id": "InterIoT:LogVPmod#ParticlesConcentration"
             },
             {
-              "@id": "sosa:Observation"
+              "@id": "sosa:Result"
             }
           ]
         },
@@ -105,7 +105,7 @@ const generate = (stationId, size, date) => fakeData.generateEmissionMeasurement
               "@id": "InterIoT:LogVPmod#Emission_CO"
             },
             {
-              "@id": "sosa:Observation"
+              "@id": "sosa:Result"
             }
           ]
         },
@@ -120,7 +120,7 @@ const generate = (stationId, size, date) => fakeData.generateEmissionMeasurement
               "@id": "InterIoT:LogVPmod#Emission_SO2"
             },
             {
-              "@id": "sosa:Observation"
+              "@id": "sosa:Result"
             }
           ]
         },
@@ -153,7 +153,7 @@ const generate = (stationId, size, date) => fakeData.generateEmissionMeasurement
               "@id": "sosa:Observation"
             },
             {
-              "@id": "InterIoT:LogVPmod#EmmissionMeasurement"
+              "@id": "InterIoT:LogVPmod#EmissionMeasurement"
             }
           ],
           "sosa:hasResult": [
