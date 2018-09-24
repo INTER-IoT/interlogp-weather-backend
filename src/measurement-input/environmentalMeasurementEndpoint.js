@@ -5,7 +5,7 @@ import emissionMeasurementEndpoint from './emissionMeasurementEndpoint';
 
 const typeMiddlewares = {
   'InterIoT:LogVPmod#WeatherMeasurement': weatherMeasurementEndpoint,
-  'InterIoT:LogVPmod#EmmissionMeasurement': emissionMeasurementEndpoint,
+  'InterIoT:LogVPmod#EmissionMeasurement': emissionMeasurementEndpoint,
   'InterIoT:LogVPmod#SoundMeasurement': soundMeasurementEndpoint,
 };
 
