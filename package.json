@@ -9,7 +9,8 @@
     "fetch-data": "babel-node --presets env utils/fetchData",
     "init-db": "babel-node --presets env utils/initDb",
     "fake-populate": "babel-node --presets env utils/fakePopulate",
-    "send-measurement": "babel-node --presets env utils/sendMeasurement"
+    "send-measurement": "babel-node --presets env utils/sendMeasurement",
+    "test-parsers": "babel-node --presets env utils/testParsers"
   },
   "author": "",
   "license": "MIT",
