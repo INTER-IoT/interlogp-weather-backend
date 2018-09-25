@@ -28,7 +28,8 @@ IntermwMessages.messagesByPort = async (portId) => {
   return messages.filter((message) => {
     if (message.weatherStation) return message.weatherStation.port.id === portId;
     if (message.emissionStation) return message.emissionStation.port.id === portId;
-    return message.soundStation.port.id === portId;
+    if (message.soundStation) return message.soundStation.port.id === portId;
+    return false;
   });
 };
 
