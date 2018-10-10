@@ -25,6 +25,7 @@ const adaptToPreviousVersion = (graph) => {
 };
 
 const flatenize = (message, items) => {
+  if (Array.isArray(message)) [message] = message; // fix that from intermw v2.3 messages come in an array, but in logp there is only 1 item per message
   items = items || [];
   Object.keys(message).forEach((key) => {
     if (key === '@graph') {
