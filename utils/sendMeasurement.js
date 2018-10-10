@@ -23,7 +23,7 @@ const options = {
     'content-type': 'application/json',
   },
   resolveWithFullResponse: true,
-  body: generator.generate(stationId, 1, new Date())[0],
+  body: generator.generate(stationId, 1, new Date()),
 };
 
 (async () => {
