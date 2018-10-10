@@ -15,7 +15,7 @@ import Rules from './rules';
 const mongo = {};
 
 mongo.user = process.env.MONGO_USER;
-mongo.pwd = process.env.MONGO_PASSWORD;
+mongo.pwd = process.env.MONGO_PWD;
 
 mongo.userString = mongo.user ? mongo.pwd ? `${mongo.user}:${mongo.pwd}@` : `${mongo.user}@` : ''; // eslint-disable-line no-nested-ternary
 
