@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 import jsf from 'json-schema-faker';
 import faker from 'faker';
 import weatherMeasurementSchema from './weatherMeasurementSchema';
