@@ -1,8 +1,8 @@
 export default {
   mongo: {
-    host: 'enolgor.dcom.upv.es',
+    host: 'localhost',
     port: 27017,
-    database: 'environment',
+    database: 'environmental',
   },
   server: {
     port: 3020,
