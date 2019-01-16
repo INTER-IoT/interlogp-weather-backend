@@ -25,6 +25,8 @@ mongo.database = process.env.MONGO_DATABASE || config.mongo.database;
 
 mongoose.connect(`mongodb://${mongo.userString}${mongo.host}:${mongo.port}/${mongo.database}`, {
   useNewUrlParser: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
 });
 
 mongoose.Promise = global.Promise;

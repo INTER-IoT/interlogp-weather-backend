@@ -18,6 +18,8 @@ const numMeasurements = process.argv[3];
 
 mongoose.connect(mongourl, {
   useNewUrlParser: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
 });
 
 mongoose.Promise = global.Promise;

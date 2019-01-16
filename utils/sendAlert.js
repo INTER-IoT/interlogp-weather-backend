@@ -13,6 +13,8 @@ const text = process.argv[4];
 
 mongoose.connect(mongourl, {
   useNewUrlParser: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
 });
 
 mongoose.Promise = global.Promise;

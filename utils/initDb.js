@@ -23,6 +23,8 @@ const mongourl = process.argv[2];
 
 mongoose.connect(mongourl, {
   useNewUrlParser: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
 });
 
 mongoose.Promise = global.Promise;
