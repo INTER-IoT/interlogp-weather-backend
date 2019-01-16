@@ -1,12 +1,12 @@
 /* eslint-disable global-require */
 
 import jsf from 'json-schema-faker';
+import faker from 'faker';
 import weatherMeasurementSchema from './weatherMeasurementSchema';
 import emissionMeasurementSchema from './emissionMeasurementSchema';
 import soundMeasurementSchema from './soundMeasurementSchema';
 
 jsf.extend('faker', () => {
-  const faker = require('faker');
   faker.locale = 'es';
   return faker;
 });
@@ -26,7 +26,7 @@ const shuffle = (a) => {
 };
 
 const generateMeasurements = (ref, num) => {
-  const measurements = jsf({
+  const measurements = jsf.generate({
     type: 'array',
     minItems: num,
     maxItems: num,
