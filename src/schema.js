@@ -151,7 +151,7 @@ const typeDefs = [`
 
     alerts(portId: Int, processed: Boolean): [Alert]
 
-    intermwMessages(portId: Int): [IntermwMessage]
+    intermwMessages(portId: Int, limit: Int): [IntermwMessage]
 
     rules: [Rule]
   }
@@ -240,9 +240,8 @@ const resolvers = {
       return Alerts.alerts(filter);
     },
     // intermw messages
-    intermwMessages(root, { portId }, context) {
-      if (portId !== undefined) return IntermwMessages.messagesByPort(portId);
-      return IntermwMessages.messages();
+    intermwMessages(root, { portId = null, limit = 10 }, context) {
+      return IntermwMessages.messagesByPort(portId, limit);
     },
     // rules
     rules(root, args, context) {

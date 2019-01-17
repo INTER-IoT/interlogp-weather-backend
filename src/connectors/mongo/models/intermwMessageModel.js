@@ -23,6 +23,27 @@ const intermwMessageSchema = new mongoose.Schema({
   },
 });
 
+intermwMessageSchema.statics.lookup = function lookup({ path, query }) {
+  const rel = mongoose.model(this.schema.path(path).options.ref);
+  const pipeline = [{
+    $lookup: {
+      from: rel.collection.name,
+      as: path,
+      let: { [path]: `$${path}` },
+      pipeline: [{
+        $match: {
+          ...query,
+          // $expr: { $in: ['$_id', `$$${path}`] },
+        },
+      }],
+    },
+  }];
+  return this.aggregate(pipeline).exec().then(r => r.map(m => this({
+    ...m,
+    [path]: m[path].map(r2 => rel(r2)),
+  })));
+};
+
 const intermwMessageModel = mongoose.model('IntermwMessage', intermwMessageSchema);
 
 export default intermwMessageModel;
