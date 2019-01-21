@@ -103,13 +103,13 @@ const typeDefs = [`
   }
 
   type Rule {
-    id: Int!
+    id: Int
     port: [Int]
     station: [Int]
     type: String!
     attribute: String!
-    min: Float!
-    max: Float!
+    comparison: Int!
+    value: Float!
     inclusive: Boolean!
   }
 
@@ -161,6 +161,7 @@ const typeDefs = [`
     createAlert(portId: Int!, text: String!): Alert
     
     createRule(rule: RuleInput!): Rule
+    deleteRule(ruleId: Int!): Rule
   }
 
   type Subscription {
@@ -262,6 +263,10 @@ const resolvers = {
     async createRule(root, { rule }, context) {
       const createdRule = await Rules.createRule(rule);
       return createdRule;
+    },
+    async deleteRule(root, { ruleId }, context) {
+      const deletedRule = await Rules.deleteRule(ruleId);
+      return deletedRule;
     },
   },
   Subscription: {

@@ -9,6 +9,11 @@ Rules.createRule = async (rule) => {
   return savedRule;
 };
 
+Rules.deleteRule = async (ruleId) => {
+  const deletedRule = await RuleModel.findOneAndRemove({ id: ruleId });
+  return deletedRule;
+};
+
 const sign = v => v < 0 ? -1 : v > 0 ? 1 : 0; // eslint-disable-line
 
 Rules.match = async (measurement, type) => {
