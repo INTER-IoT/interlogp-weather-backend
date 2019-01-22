@@ -26,6 +26,7 @@ Rules.match = async (measurement, type) => {
   const station = measurement[`${type}Station`];
   const filter = { $and: [] };
   filter.$and.push({ type });
+  filter.$and.push({ enabled: true });
   filter.$and.push({ $or: [{ port: [] }, { port: station.port.id }] });
   filter.$and.push({ $or: [{ station: [] }, { station: station.id }] });
   const rules = await RuleModel.find(filter);
