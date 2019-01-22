@@ -111,6 +111,7 @@ const typeDefs = [`
     comparison: Int!
     value: Float!
     inclusive: Boolean!
+    enabled: Boolean!
   }
 
   input RuleInput {
@@ -162,6 +163,7 @@ const typeDefs = [`
     
     createRule(rule: RuleInput!): Rule
     deleteRule(ruleId: Int!): Rule
+    setRuleState(ruleId: Int!, state: Boolean!): Rule
   }
 
   type Subscription {
@@ -267,6 +269,10 @@ const resolvers = {
     async deleteRule(root, { ruleId }, context) {
       const deletedRule = await Rules.deleteRule(ruleId);
       return deletedRule;
+    },
+    async setRuleState(root, { ruleId, state }, context) {
+      const rule = await Rules.setRuleState(ruleId, state);
+      return rule;
     },
   },
   Subscription: {

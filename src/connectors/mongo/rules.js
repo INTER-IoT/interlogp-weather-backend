@@ -14,6 +14,12 @@ Rules.deleteRule = async (ruleId) => {
   return deletedRule;
 };
 
+Rules.setRuleState = async (ruleId, state) => {
+  const rule = await RuleModel.findOneAndUpdate({ id: ruleId }, { enabled: state });
+  rule.enabled = state;
+  return rule;
+};
+
 const sign = v => v < 0 ? -1 : v > 0 ? 1 : 0; // eslint-disable-line
 
 Rules.match = async (measurement, type) => {
