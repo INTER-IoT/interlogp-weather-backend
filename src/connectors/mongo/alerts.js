@@ -28,9 +28,10 @@ Alerts.processAlert = async (alertId) => {
 };
 
 
-Alerts.createAlert = async (portId, text) => {
+Alerts.createAlert = async (portId, title, text) => {
   const alert = {
     text,
+    title,
     date: new Date(),
     processed: false,
     port: await PortModel.findOne({ id: portId }),

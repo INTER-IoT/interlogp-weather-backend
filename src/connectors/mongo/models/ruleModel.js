@@ -37,7 +37,7 @@ const ruleSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: true,
-  }
+  },
 });
 
 ruleSchema.pre('save', async function () { // eslint-disable-line

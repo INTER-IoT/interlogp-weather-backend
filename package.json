@@ -6,6 +6,7 @@
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "dev": "nodemon src/index.js --exec babel-node --presets env",
     "build": "babel src -d dist",
+    "lint": "eslint src",
     "fetch-data": "babel-node --presets env utils/fetchData",
     "init-db": "babel-node --presets env utils/initDb",
     "fake-populate": "babel-node --presets env utils/fakePopulate",

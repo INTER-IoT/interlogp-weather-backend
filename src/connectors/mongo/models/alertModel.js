@@ -14,6 +14,10 @@ const alertSchema = new mongoose.Schema({
   dateProcessed: {
     type: Date,
   },
+  title: {
+    type: String,
+    required: true,
+  },
   text: {
     type: String,
     required: true,

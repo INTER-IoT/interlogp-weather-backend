@@ -97,6 +97,7 @@ const typeDefs = [`
     id: Int!
     date: String!
     processed: Boolean!
+    title: String!
     text: String!
     dateProcessed: String
     port: Port!
@@ -159,7 +160,7 @@ const typeDefs = [`
 
   type Mutation {
     processAlert(alertId: Int!): Alert
-    createAlert(portId: Int!, text: String!): Alert
+    createAlert(portId: Int!, title: String!, text: String!): Alert
     
     createRule(rule: RuleInput!): Rule
     deleteRule(ruleId: Int!): Rule
