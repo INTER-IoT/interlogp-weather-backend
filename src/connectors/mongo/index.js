@@ -11,6 +11,7 @@ import SoundMeasurements from './soundMeasurements';
 import Alerts from './alerts';
 import IntermwMessages from './intermwMessages';
 import Rules from './rules';
+import Statistics from './statistics';
 
 const mongo = {};
 
@@ -49,6 +50,7 @@ export {
   Alerts,
   IntermwMessages,
   Rules,
+  Statistics,
 };
 
 export default {
@@ -62,4 +64,5 @@ export default {
   Alerts,
   IntermwMessages,
   Rules,
+  Statistics,
 };

@@ -20,6 +20,7 @@ import {
   Alerts,
   IntermwMessages,
   Rules,
+  Statistics,
 } from './connectors';
 
 const typeDefs = [`
@@ -133,6 +134,28 @@ const typeDefs = [`
     soundStation: SoundStation
   }
 
+  enum Period {
+    daily
+    monthly
+  }
+
+  enum StatisticType {
+    weather
+    sound
+    emission
+  }
+
+  type Statistic{
+    day: Int
+    month: Int!
+    year: Int!
+    period: Period!
+    statType: StatisticType!
+    stationId: Int!
+    portId: Int!
+    average: String!
+  }
+
   type Query {
     ports: [Port]
 
@@ -154,6 +177,8 @@ const typeDefs = [`
     alerts(portId: Int, processed: Boolean): [Alert]
 
     intermwMessages(portId: Int, limit: Int): [IntermwMessage]
+
+    statistics(statType: StatisticType, period: Period, stationId: Int, portId: Int, day: Int, month: Int, year: Int): [Statistic]
 
     rules: [Rule]
   }
@@ -250,6 +275,10 @@ const resolvers = {
     // rules
     rules(root, args, context) {
       return Rules.rules();
+    },
+    // statistics
+    statistics(root, args, context) {
+      return Statistics.statistics(args);
     },
   },
   Mutation: {

@@ -9,6 +9,7 @@ import CounterModel from './counterModel';
 import AlertModel from './alertModel';
 import IntermwMessageModel from './intermwMessageModel';
 import RuleModel from './ruleModel';
+import StatisticModel from './statisticModel';
 
 export {
   PortModel,
@@ -22,6 +23,7 @@ export {
   AlertModel,
   IntermwMessageModel,
   RuleModel,
+  StatisticModel,
 };
 
 export default {
@@ -36,4 +38,5 @@ export default {
   AlertModel,
   IntermwMessageModel,
   RuleModel,
+  StatisticModel,
 };
