@@ -13,6 +13,10 @@ const statisticSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  date: {
+    type: Date,
+    required: false,
+  },
   statType: {
     type: String,
     required: true,
@@ -33,6 +37,10 @@ const statisticSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Mixed,
     required: true,
   },
+});
+
+statisticSchema.pre('save', async function () { // eslint-disable-line
+  if (this.period === 'daily') this.date = new Date(`${this.year}-${`00${this.month}`.substr(-2, 2)}-${`00${this.day}`.substr(-2, 2)}`);
 });
 
 const statisticModel = mongoose.model('Statistic', statisticSchema);

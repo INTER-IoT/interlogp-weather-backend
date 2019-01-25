@@ -5,6 +5,8 @@ import {
   StatisticModel,
 } from './models';
 
+const TYPES = ['weather', 'emission', 'sound'];
+
 const Statistics = {};
 
 Statistics.statistics = async ({
@@ -115,8 +117,9 @@ const getDailyStatistics = async (type, after, before) => {
 
 Statistics.generateDaily = async (after, before) => {
   const stats = (
-    await Promise.all(['weather', 'emission', 'sound'].map(type => getDailyStatistics(type, after, before)))
+    await Promise.all(TYPES.map(type => getDailyStatistics(type, after, before)))
   ).reduce((agg, typeStats) => [...agg, ...typeStats], []);
+  console.log(`Saving ${stats.length} daily stats for all stations...`);
   await Promise.all(stats.map(stat => new StatisticModel(stat).save()));
 };
 
@@ -130,6 +133,79 @@ Statistics.latestDaily = async () => {
   return new Date(`${last.year}-${`00${last.month}`.substr(-2, 2)}-${`00${last.day}`.substr(-2, 2)}`);
 };
 
+const avgObj = (arr) => {
+  const fields = Object.keys(arr[0]);
+  const zero = fields.reduce((agg, field) => {
+    agg[field] = 0;
+    return agg;
+  }, {});
+  return arr.reduce((avg, item) => {
+    fields.forEach((field) => {
+      avg[field] += item[field] / arr.length;
+      return avg;
+    });
+    return avg;
+  }, zero);
+};
+
+const getMonthlyStatistics = async (type, after, before) => {
+  const match = { $match: { $and: [] } };
+  match.$match.$and.push({ statType: type });
+  match.$match.$and.push({ period: 'daily' });
+  if (after) {
+    match.$match.$and.push({
+      date: {
+        $gt: after,
+      },
+    });
+  }
+  if (before) {
+    match.$match.$and.push({
+      date: {
+        $lt: before,
+      },
+    });
+  }
+  const grouping = {
+    $group: {
+      _id: {
+        month: '$month',
+        year: '$year',
+        stationId: '$stationId',
+        portId: '$portId',
+      },
+      average: {
+        $push: '$average',
+      },
+    },
+  };
+  const pipeline = [
+    match,
+    grouping,
+  ];
+  const result = await StatisticModel.aggregate(pipeline).exec();
+  const stats = result.map((r) => {
+    const stat = {};
+    stat.month = r._id.month; // eslint-disable-line no-underscore-dangle
+    stat.year = r._id.year; // eslint-disable-line no-underscore-dangle
+    stat.statType = type;
+    stat.period = 'monthly';
+    stat.stationId = r._id.stationId; // eslint-disable-line no-underscore-dangle
+    stat.portId = r._id.portId; // eslint-disable-line no-underscore-dangle
+    stat.average = avgObj(r.average);
+    return stat;
+  });
+  return stats;
+};
+
+Statistics.generateMonthly = async (after, before) => {
+  const stats = (
+    await Promise.all(TYPES.map(type => getMonthlyStatistics(type, after, before)))
+  ).reduce((agg, typeStats) => [...agg, ...typeStats], []);
+  console.log(`Saving ${stats.length} monthly stats for all stations...`);
+  await Promise.all(stats.map(stat => new StatisticModel(stat).save()));
+};
+
 Statistics.latestMonthly = async () => {
   const last = await StatisticModel.findOne({ period: 'monthly' }).sort({
     year: -1,
@@ -137,17 +213,19 @@ Statistics.latestMonthly = async () => {
     day: -1,
   });
   if (!last) return null;
-  return new Date(`${last.year}-${`00${last.month}`.substr(-2, 2)}-01`);
+  return last;
 };
 
 Statistics.generate = async () => {
-  const last = await Statistics.latestDaily();
-  const after = last === null ? null : new Date(last.getTime() + 24 * 3600 * 1000);
+  const latestDaily = await Statistics.latestDaily();
+  const afterDay = latestDaily === null ? null : new Date(latestDaily.getTime() + 24 * 3600 * 1000);
   const today = new Date();
-  const before = new Date(`${today.getFullYear()}-${`00${today.getMonth() + 1}`.substr(-2, 2)}-${`00${today.getDate()}`.substr(-2, 2)}`);
-  await Statistics.generateDaily(after, before);
-  const lastMonth = await Statistics.latestMonthly();
-  console.log(lastMonth);
+  const beforeDay = new Date(`${today.getFullYear()}-${`00${today.getMonth() + 1}`.substr(-2, 2)}-${`00${today.getDate()}`.substr(-2, 2)}`);
+  await Statistics.generateDaily(afterDay, beforeDay);
+  const latestMonthly = await Statistics.latestMonthly();
+  const afterMonth = latestMonthly === null ? null : new Date(`${latestMonthly.month === 12 ? latestMonthly.year + 1 : latestMonthly.year}-${`00${latestMonthly.month === 12 ? 1 : latestMonthly.month + 1}`.substr(-2, 2)}-01`);
+  const beforeMonth = new Date(`${today.getFullYear()}-${`00${today.getMonth() + 1}`.substr(-2, 2)}-01`);
+  await Statistics.generateMonthly(afterMonth, beforeMonth);
 };
 
 export default Statistics;

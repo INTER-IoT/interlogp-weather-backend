@@ -12,6 +12,9 @@ import {
   EmissionMeasurementModel,
   SoundMeasurementModel,
   AlertModel,
+  RuleModel,
+  IntermwMessageModel,
+  StatisticModel,
 } from '../src/connectors/mongo/models';
 
 import portData from './data/ports';
@@ -47,6 +50,9 @@ const run = async () => {
   await EmissionMeasurementModel.remove({});
   await SoundMeasurementModel.remove({});
   await AlertModel.remove({});
+  await RuleModel.remove({});
+  await IntermwMessageModel.remove({});
+  await StatisticModel.remove({});
   process.stdout.write('done\n');
 
   process.stdout.write('Saving counters...');

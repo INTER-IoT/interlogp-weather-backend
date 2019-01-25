@@ -4,8 +4,6 @@ import mongoose from 'mongoose';
 
 import Statistics from '../src/connectors/mongo/statistics';
 
-// import { StatisticModel } from '../src/connectors/mongo/models';
-
 const mongourl = process.argv[2];
 
 mongoose.connect(mongourl, {
@@ -13,8 +11,6 @@ mongoose.connect(mongourl, {
   useFindAndModify: false,
   useCreateIndex: true,
 });
-
-mongoose.set('debug', true);
 
 mongoose.Promise = global.Promise;
 

@@ -15,6 +15,8 @@ import fakeData from './fake-data';
 
 const mongourl = process.argv[2];
 const numMeasurements = process.argv[3];
+const from = process.argv[4];
+const to = process.argv[5];
 
 mongoose.connect(mongourl, {
   useNewUrlParser: true,
@@ -36,9 +38,9 @@ const run = async () => {
   const emissionStations = await EmissionStationModel.find();
   const soundStations = await SoundStationModel.find();
 
-  process.stdout.write(`Generating ${numMeasurements} fake measurements per weather station...`);
+  process.stdout.write(`Generating ${numMeasurements} fake measurements per day and weather station...`);
   const weatherMeasurements = weatherStations.reduce((measurements, weatherStation) => {
-    const weatherStationMeasurements = fakeData.generateWeatherMeasurements(numMeasurements)
+    const weatherStationMeasurements = fakeData.generateWeatherMeasurements(numMeasurements, from, to)
       .map((measurement) => {
         measurement.weatherStation = weatherStation._id;
         return measurement;
@@ -48,9 +50,9 @@ const run = async () => {
   }, []);
   process.stdout.write('done\n');
 
-  process.stdout.write(`Generating ${numMeasurements} fake measurements per emission station...`);
+  process.stdout.write(`Generating ${numMeasurements} fake measurements per day and emission station...`);
   const emissionMeasurements = emissionStations.reduce((measurements, emissionStation) => {
-    const emissionStationMeasurements = fakeData.generateEmissionMeasurements(numMeasurements)
+    const emissionStationMeasurements = fakeData.generateEmissionMeasurements(numMeasurements, from, to)
       .map((measurement) => {
         measurement.emissionStation = emissionStation._id;
         return measurement;
@@ -60,9 +62,9 @@ const run = async () => {
   }, []);
   process.stdout.write('done\n');
 
-  process.stdout.write(`Generating ${numMeasurements} fake measurements per sound station...`);
+  process.stdout.write(`Generating ${numMeasurements} fake measurements per day and sound station...`);
   const soundMeasurements = soundStations.reduce((measurements, soundStation) => {
-    const soundStationMeasurements = fakeData.generateSoundMeasurements(numMeasurements)
+    const soundStationMeasurements = fakeData.generateSoundMeasurements(numMeasurements, from, to)
       .map((measurement) => {
         measurement.soundStation = soundStation._id;
         return measurement;

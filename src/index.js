@@ -15,6 +15,8 @@ import schema from './schema';
 
 import config from './config';
 
+import cronjobs from './cronjobs';
+
 const PORT = config.server.port;
 
 const GRAPHQL_PATH = '/graphql';
@@ -64,3 +66,5 @@ SubscriptionServer.create(
     path: SUBSCRIPTIONS_PATH,
   },
 );
+
+cronjobs.scheduleAll();
