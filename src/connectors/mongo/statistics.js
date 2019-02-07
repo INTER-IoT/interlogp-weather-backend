@@ -5,7 +5,7 @@ import {
   StatisticModel,
 } from './models';
 
-const TYPES = ['weather', 'emission', 'sound'];
+const TYPES = ['weather', 'emission', 'sound', 'noatumWeather'];
 
 const Statistics = {};
 

@@ -8,6 +8,8 @@ import EmissionStations from './emissionStations';
 import EmissionMeasurements from './emissionMeasurements';
 import SoundStations from './soundStations';
 import SoundMeasurements from './soundMeasurements';
+import NoatumWeatherStations from './noatumWeatherStations';
+import NoatumWeatherMeasurements from './noatumWeatherMeasurements';
 import Alerts from './alerts';
 import IntermwMessages from './intermwMessages';
 import Rules from './rules';
@@ -47,6 +49,8 @@ export {
   EmissionMeasurements,
   SoundStations,
   SoundMeasurements,
+  NoatumWeatherStations,
+  NoatumWeatherMeasurements,
   Alerts,
   IntermwMessages,
   Rules,
@@ -61,6 +65,8 @@ export default {
   EmissionMeasurements,
   SoundStations,
   SoundMeasurements,
+  NoatumWeatherStations,
+  NoatumWeatherMeasurements,
   Alerts,
   IntermwMessages,
   Rules,

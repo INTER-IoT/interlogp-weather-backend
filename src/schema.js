@@ -17,6 +17,8 @@ import {
   EmissionMeasurements,
   SoundStations,
   SoundMeasurements,
+  NoatumWeatherStations,
+  NoatumWeatherMeasurements,
   Alerts,
   IntermwMessages,
   Rules,

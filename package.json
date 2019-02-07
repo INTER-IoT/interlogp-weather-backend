@@ -12,9 +12,7 @@
     "fake-populate": "babel-node --presets env utils/fakePopulate",
     "send-measurement": "babel-node --presets env utils/sendMeasurement",
     "generate-stats": "babel-node --presets env utils/generateStats",
-    "test-parsers": "babel-node --presets env tests/testParsers",
-    "test": "babel-node --presets env tests/test",
-    "test-lookup": "babel-node --presets env tests/lookup"
+    "test-parsers": "babel-node --presets env tests/testParsers"
   },
   "author": "",
   "license": "MIT",

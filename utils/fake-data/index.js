@@ -3,6 +3,7 @@ import faker from 'faker';
 import weatherMeasurementSchema from './weatherMeasurementSchema';
 import emissionMeasurementSchema from './emissionMeasurementSchema';
 import soundMeasurementSchema from './soundMeasurementSchema';
+import noatumWeatherMeasurementSchema from './noatumWeatherMeasurementSchema';
 import {
   DayGenerator,
   dayDiv,
@@ -17,6 +18,7 @@ const refs = [
   weatherMeasurementSchema,
   emissionMeasurementSchema,
   soundMeasurementSchema,
+  noatumWeatherMeasurementSchema,
 ];
 
 const generateMeasurements = (ref, num, from, to) => {
@@ -56,6 +58,7 @@ const fakeData = {
     delete measurement.duration;
     return measurement;
   }),
+  generateNoatumWeatherMeasurements: (num, from, to) => generateMeasurements('noatumWeatherMeasurement', num, from, to),
 };
 
 export default fakeData;

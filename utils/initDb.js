@@ -7,10 +7,12 @@ import {
   WeatherStationModel,
   EmissionStationModel,
   SoundStationModel,
+  NoatumWeatherStationModel,
   CounterModel,
   WeatherMeasurementModel,
   EmissionMeasurementModel,
   SoundMeasurementModel,
+  NoatumWeatherMeasurementModel,
   AlertModel,
   RuleModel,
   IntermwMessageModel,
@@ -21,6 +23,7 @@ import portData from './data/ports';
 import weatherStationData from './data/weatherStations';
 import emissionStationData from './data/emissionStations';
 import soundStationData from './data/soundStations';
+import noatumStationData from './data/noatumWeatherStations';
 
 const mongourl = process.argv[2];
 
@@ -46,9 +49,11 @@ const run = async () => {
   await WeatherStationModel.remove({});
   await EmissionStationModel.remove({});
   await SoundStationModel.remove({});
+  await NoatumWeatherStationModel.remove({});
   await WeatherMeasurementModel.remove({});
   await EmissionMeasurementModel.remove({});
   await SoundMeasurementModel.remove({});
+  await NoatumWeatherMeasurementModel.remove({});
   await AlertModel.remove({});
   await RuleModel.remove({});
   await IntermwMessageModel.remove({});
@@ -59,6 +64,7 @@ const run = async () => {
   await new CounterModel({ _id: 'weatherCounter' }).save();
   await new CounterModel({ _id: 'emissionCounter' }).save();
   await new CounterModel({ _id: 'soundCounter' }).save();
+  await new CounterModel({ _id: 'noatumWeatherCounter' }).save();
   await new CounterModel({ _id: 'alertCounter' }).save();
   await new CounterModel({ _id: 'ruleCounter' }).save();
   process.stdout.write('done\n');
@@ -86,6 +92,13 @@ const run = async () => {
     soundStation.port = ports.find(port => port.id === soundStation.portId)._id;
     return soundStation;
   }).map(soundStation => new SoundStationModel(soundStation).save()));
+  process.stdout.write('done\n');
+
+  process.stdout.write('Saving noatumWeather stations...');
+  await Promise.all(noatumStationData.map((noatumWeatherStation) => {
+    noatumWeatherStation.port = ports.find(port => port.id === noatumWeatherStation.portId)._id;
+    return noatumWeatherStation;
+  }).map(noatumWeatherStation => new NoatumWeatherStationModel(noatumWeatherStation).save()));
   process.stdout.write('done\n');
 
   process.exit(0);

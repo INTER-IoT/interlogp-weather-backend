@@ -1,5 +1,10 @@
 import rp from 'request-promise'; // eslint-disable-line import/no-extraneous-dependencies
-import { weatherMessageGenerator, emissionMessageGenerator, soundMessageGenerator } from './raw-message-generators';
+import {
+  weatherMessageGenerator,
+  emissionMessageGenerator,
+  soundMessageGenerator,
+  noatumWeatherMessageGenerator,
+} from './raw-message-generators';
 
 // console.log(weatherMessageGenerator.generate(1, 1)[0]);
 
@@ -7,6 +12,7 @@ const getGenerator = type => ({
   weather: weatherMessageGenerator,
   emission: emissionMessageGenerator,
   sound: soundMessageGenerator,
+  noatumWeather: noatumWeatherMessageGenerator,
 })[type];
 
 const generator = getGenerator(process.argv[2]);
