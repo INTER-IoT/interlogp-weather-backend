@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 import fakeData from '../fake-data';
 
-const generate = (stationId, size, date) => fakeData.generateWeatherMeasurements(size)
+const generate = (stationId, size, date) => fakeData.generateWeatherMeasurements(size, `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`, `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`)
   .map((measurement) => {
     measurement.date = new Date(date);
     measurement.messageDate = new Date(measurement.date);

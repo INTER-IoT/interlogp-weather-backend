@@ -59,6 +59,13 @@ const typeDefs = [`
     name: String!
   }
 
+  type NoatumWeatherStation {
+    id: Int!
+    position: Position!
+    port: Port!
+    name: String!
+  }
+
   type WeatherMeasurement {
     id: Int!
     date: String!
@@ -94,6 +101,13 @@ const typeDefs = [`
     minLevel: Int!
     avgLevel: Int!
     soundStation: SoundStation!
+  }
+
+  type NoatumWeatherMeasurement {
+    id: Int!
+    date: String!
+    windSpeed: Float!
+    noatumWeatherStation: NoatumWeatherStation!
   }
 
   type Alert {
@@ -134,6 +148,7 @@ const typeDefs = [`
     weatherStation: WeatherStation
     emissionStation: EmissionStation
     soundStation: SoundStation
+    noatumWeatherStation: NoatumWeatherStation
   }
 
   enum Period {
@@ -145,6 +160,7 @@ const typeDefs = [`
     weather
     sound
     emission
+    noatumweather
   }
 
   type Statistic{
@@ -176,6 +192,11 @@ const typeDefs = [`
     lastSoundMeasurementByStation(soundStationId: Int!): SoundMeasurement
     lastSoundMeasurementsByPort(portId: Int!): [SoundMeasurement]
 
+    noatumWeatherStations(portId: Int): [NoatumWeatherStation]
+    noatumWeatherMeasurements(noatumWeatherStationId: Int): [NoatumWeatherMeasurement]
+    lastNoatumWeatherMeasurementByStation(noatumWeatherStationId: Int!): NoatumWeatherMeasurement
+    lastNoatumWeatherMeasurementsByPort(portId: Int!): [NoatumWeatherMeasurement]
+
     alerts(portId: Int, processed: Boolean): [Alert]
 
     intermwMessages(portId: Int, limit: Int): [IntermwMessage]
@@ -198,6 +219,7 @@ const typeDefs = [`
     newWeatherMeasurement(portId: Int): WeatherMeasurement
     newEmissionMeasurement(portId: Int): EmissionMeasurement
     newSoundMeasurement(portId: Int): SoundMeasurement
+    newNoatumWeatherMeasurement(portId: Int): NoatumWeatherMeasurement
     newAlert(portId: Int): Alert
     processedAlert(portId: Int): Alert
     newIntermwMessage(portId: Int): IntermwMessage
@@ -260,6 +282,21 @@ const resolvers = {
     },
     lastSoundMeasurementsByPort(root, { portId }, context) {
       return SoundMeasurements.lastMeasurementsByPort(portId);
+    },
+    // noatumWeather queries
+    noatumWeatherStations(root, { portId }, context) {
+      if (portId !== undefined) return NoatumWeatherStations.stationsByPort(portId);
+      return NoatumWeatherStations.stations();
+    },
+    noatumWeatherMeasurements(root, { noatumWeatherStationId }, context) {
+      if (noatumWeatherStationId !== undefined) return NoatumWeatherMeasurements.measurementsByStation(noatumWeatherStationId);
+      return NoatumWeatherMeasurements.measurements();
+    },
+    lastNoatumWeatherMeasurementByStation(root, { noatumWeatherStationId }, context) {
+      return NoatumWeatherMeasurements.lastMeasurementByStation(noatumWeatherStationId);
+    },
+    lastNoatumWeatherMeasurementsByPort(root, { portId }, context) {
+      return NoatumWeatherMeasurements.lastMeasurementsByPort(portId);
     },
     // alert queries
     alerts(root, { portId, processed }, context) {
@@ -338,6 +375,16 @@ const resolvers = {
         },
       ),
     },
+    newNoatumWeatherMeasurement: {
+      // subscribe: () => pubsub.asyncIterator(topics.NEW_WEATHER_MEASUREMENT_TOPIC),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(topics.NEW_NOATUMWEATHER_MEASUREMENT_TOPIC),
+        (payload, variables) => {
+          if (variables.portId === undefined) return true;
+          return payload.newNoatumWeatherMeasurement.noatumWeatherStation.port.id === variables.portId;
+        },
+      ),
+    },
     newAlert: {
       // subscribe: () => pubsub.asyncIterator(topics.NEW_ALERT_TOPIC),
       subscribe: withFilter(
@@ -363,7 +410,7 @@ const resolvers = {
         (payload, variables) => {
           if (variables.portId === undefined) return true;
           const message = payload.newIntermwMessage;
-          const station = message.weatherStation || message.soundStation || message.emissionStation;
+          const station = message.weatherStation || message.soundStation || message.emissionStation || message.noatumWeatherStation;
           return station.port.id === variables.portId;
         },
       ),

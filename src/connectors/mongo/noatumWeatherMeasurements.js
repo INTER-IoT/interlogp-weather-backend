@@ -32,7 +32,7 @@ NoatumWeatherMeasurements.lastMeasurementsByPort = async (portId) => {
 
 NoatumWeatherMeasurements.saveNewMeasurement = async (measurement) => {
   measurement.noatumWeatherStation = await NoatumWeatherStationModel.findOne({ id: measurement.stationId });
-  await new NoatumWeatherMeasurementModel(measurement).save();
+  measurement = await new NoatumWeatherMeasurementModel(measurement).save();
   const populatedMeasurement = await NoatumWeatherMeasurementModel.populate(measurement, {
     path: 'noatumWeatherStation',
     populate: {

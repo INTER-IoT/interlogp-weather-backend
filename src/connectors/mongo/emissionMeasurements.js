@@ -32,7 +32,7 @@ EmissionMeasurements.lastMeasurementsByPort = async (portId) => {
 
 EmissionMeasurements.saveNewMeasurement = async (measurement) => {
   measurement.emissionStation = await EmissionStationModel.findOne({ id: measurement.stationId });
-  await new EmissionMeasurementModel(measurement).save();
+  measurement = await new EmissionMeasurementModel(measurement).save();
   const populatedMeasurement = await EmissionMeasurementModel.populate(measurement, {
     path: 'emissionStation',
     populate: {

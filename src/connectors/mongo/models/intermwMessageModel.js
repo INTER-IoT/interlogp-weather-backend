@@ -17,6 +17,10 @@ const intermwMessageSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'EmissionStation',
   },
+  noatumWeatherStation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'NoatumWeatherStation',
+  },
   content: {
     type: String,
     required: true,

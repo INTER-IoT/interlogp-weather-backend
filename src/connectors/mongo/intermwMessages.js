@@ -4,6 +4,7 @@ import {
   WeatherStationModel,
   EmissionStationModel,
   SoundStationModel,
+  NoatumWeatherStationModel,
   IntermwMessageModel,
 } from './models';
 
@@ -62,7 +63,8 @@ IntermwMessages.messagesByPort = async (portId, limit) => {
   const weatherStationMessages = await IntermwMessageModel.aggregate(pipelineByPort(WeatherStationModel, 'weatherStation', portId, limit)).exec();
   const emissionStationMessages = await IntermwMessageModel.aggregate(pipelineByPort(EmissionStationModel, 'emissionStation', portId, limit)).exec();
   const soundStationMessages = await IntermwMessageModel.aggregate(pipelineByPort(SoundStationModel, 'soundStation', portId, limit)).exec();
-  const messages = [...weatherStationMessages, ...emissionStationMessages, ...soundStationMessages];
+  const noatumWeatherStationMessages = await IntermwMessageModel.aggregate(pipelineByPort(NoatumWeatherStationModel, 'noatumWeatherStation', portId, limit)).exec();
+  const messages = [...weatherStationMessages, ...emissionStationMessages, ...soundStationMessages, ...noatumWeatherStationMessages];
   return messages.sort((m1, m2) => m2.date - m1.date).slice(0, limit);
 };
 
@@ -70,15 +72,16 @@ IntermwMessages.getStationByType = type => ({
   weather: 'weatherStation',
   emission: 'emissionStation',
   sound: 'soundStation',
+  noatumWeather: 'noatumWeatherStation',
 })[type];
 
 IntermwMessages.saveNewMessage = async (body, date, stationId, type) => {
-  const intermwMessage = {
+  let intermwMessage = {
     content: Buffer.from(JSON.stringify(body)).toString('base64'),
     date,
   };
   intermwMessage[IntermwMessages.getStationByType(type)] = stationId;
-  await new IntermwMessageModel(intermwMessage).save();
+  intermwMessage = await new IntermwMessageModel(intermwMessage).save();
   const message = await IntermwMessageModel.populate(intermwMessage, {
     path: IntermwMessages.getStationByType(type),
     populate: {
