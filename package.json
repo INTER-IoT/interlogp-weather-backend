@@ -12,7 +12,8 @@
     "fake-populate": "babel-node --presets env utils/fakePopulate",
     "send-measurement": "babel-node --presets env utils/sendMeasurement",
     "generate-stats": "babel-node --presets env utils/generateStats",
-    "test-parsers": "babel-node --presets env tests/testParsers"
+    "test-parsers": "babel-node --presets env tests/testParsers",
+    "noatumcsv2js": "babel-node --presets env utils/data/noatumcsv2js.js"
   },
   "author": "",
   "license": "MIT",

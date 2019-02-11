@@ -33,6 +33,26 @@ Statistics.statistics = async ({
 
 const getFields = model => Object.keys(model.schema.paths).filter(key => key !== 'id' && !key.startsWith('_') && model.schema.paths[key].instance === 'Number');
 
+const purgeData = (model, after, before, ...other) => {
+  const match = { $and: [] };
+  if (after) {
+    match.$and.push({
+      date: {
+        $gt: after,
+      },
+    });
+  }
+  if (before) {
+    match.$and.push({
+      date: {
+        $lt: before,
+      },
+    });
+  }
+  if (other) other.forEach(option => match.$and.push(option));
+  return model.deleteMany(match);
+};
+
 const getDailyAvgPipeline = (model, stationModel, fields, after, before) => {
   const station = Object.keys(model.schema.paths).find(key => key.endsWith('Station'));
   const match = { $match: { $and: [] } };
@@ -98,6 +118,8 @@ const getDailyStatistics = async (type, after, before) => {
   const stationModel = mongoose.model(`${type.charAt(0).toUpperCase()}${type.slice(1)}Station`);
   const fields = getFields(model);
   const result = await model.aggregate(getDailyAvgPipeline(model, stationModel, fields, after, before)).exec();
+  const deleted = await purgeData(model, after, before);
+  console.log(`Deleted: ${deleted.n} daily measurements of ${type}`);
   return result.map((r) => {
     const stat = {};
     stat.day = r._id.day; // eslint-disable-line no-underscore-dangle
@@ -184,6 +206,8 @@ const getMonthlyStatistics = async (type, after, before) => {
     grouping,
   ];
   const result = await StatisticModel.aggregate(pipeline).exec();
+  const deleted = await purgeData(StatisticModel, after, before, { period: 'daily' }, { statType: type });
+  console.log(`Deleted: ${deleted.n} daily statistics of ${type}`);
   const stats = result.map((r) => {
     const stat = {};
     stat.month = r._id.month; // eslint-disable-line no-underscore-dangle

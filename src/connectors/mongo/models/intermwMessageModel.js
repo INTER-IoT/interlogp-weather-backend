@@ -25,6 +25,10 @@ const intermwMessageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  sentBy: {
+    type: String,
+    required: true,
+  },
 });
 
 intermwMessageSchema.statics.lookup = function lookup({ path, query }) {

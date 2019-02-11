@@ -75,10 +75,11 @@ IntermwMessages.getStationByType = type => ({
   noatumWeather: 'noatumWeatherStation',
 })[type];
 
-IntermwMessages.saveNewMessage = async (body, date, stationId, type) => {
+IntermwMessages.saveNewMessage = async (body, sentBy, date, stationId, type) => {
   let intermwMessage = {
     content: Buffer.from(JSON.stringify(body)).toString('base64'),
     date,
+    sentBy,
   };
   intermwMessage[IntermwMessages.getStationByType(type)] = stationId;
   intermwMessage = await new IntermwMessageModel(intermwMessage).save();

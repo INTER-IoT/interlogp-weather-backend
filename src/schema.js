@@ -145,6 +145,7 @@ const typeDefs = [`
   type IntermwMessage {
     date: String!
     content: String!
+    sentBy: String!
     weatherStation: WeatherStation
     emissionStation: EmissionStation
     soundStation: SoundStation

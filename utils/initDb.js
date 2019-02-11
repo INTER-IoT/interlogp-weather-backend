@@ -44,20 +44,20 @@ db.on('error', () => {
 
 const run = async () => {
   process.stdout.write('Removing existing data...');
-  await CounterModel.remove({});
-  await PortModel.remove({});
-  await WeatherStationModel.remove({});
-  await EmissionStationModel.remove({});
-  await SoundStationModel.remove({});
-  await NoatumWeatherStationModel.remove({});
-  await WeatherMeasurementModel.remove({});
-  await EmissionMeasurementModel.remove({});
-  await SoundMeasurementModel.remove({});
-  await NoatumWeatherMeasurementModel.remove({});
-  await AlertModel.remove({});
-  await RuleModel.remove({});
-  await IntermwMessageModel.remove({});
-  await StatisticModel.remove({});
+  await CounterModel.deleteMany({});
+  await PortModel.deleteMany({});
+  await WeatherStationModel.deleteMany({});
+  await EmissionStationModel.deleteMany({});
+  await SoundStationModel.deleteMany({});
+  await NoatumWeatherStationModel.deleteMany({});
+  await WeatherMeasurementModel.deleteMany({});
+  await EmissionMeasurementModel.deleteMany({});
+  await SoundMeasurementModel.deleteMany({});
+  await NoatumWeatherMeasurementModel.deleteMany({});
+  await AlertModel.deleteMany({});
+  await RuleModel.deleteMany({});
+  await IntermwMessageModel.deleteMany({});
+  await StatisticModel.deleteMany({});
   process.stdout.write('done\n');
 
   process.stdout.write('Saving counters...');

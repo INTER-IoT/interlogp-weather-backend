@@ -49,7 +49,7 @@ const generate = (stationId, size, date) => fakeData.generateNoatumWeatherMeasur
             },
             {
               "@id": "_:b1",
-              "iiot:hasName": "WSM_S014",
+              "iiot:hasName": "WSM_S${stationId}",
               "iiotex:hasLocalId": "http://www.inter-iot.eu/nctv/seams2/WSM_S${stationId}",
               "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": [
                 {
