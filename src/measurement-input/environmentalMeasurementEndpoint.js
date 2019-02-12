@@ -18,6 +18,7 @@ export default async (req, res) => {
       .reduce((agg, types) => [...agg, ...types], [])
       .slice(); // slice will clone the instance
     const middlewareType = Object.keys(typeMiddlewares).find(type => typeArray.indexOf(type) > -1);
+    console.log(`New INTER-MW message received: ${middlewareType}`);
     const middleware = typeMiddlewares[middlewareType];
     middleware(req, res);
   } catch (error) {
