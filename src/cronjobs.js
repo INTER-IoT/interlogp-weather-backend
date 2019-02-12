@@ -1,5 +1,6 @@
 import schedule from 'node-schedule';
 import Statistics from './connectors/mongo/statistics';
+import IntermwMessages from './connectors/mongo/intermwMessages';
 
 const cronjobs = {};
 
@@ -24,6 +25,11 @@ cronjobs.jobs = [
     name: 'generate-stats',
     rule: '0 1 * * *',
     job: Statistics.generate,
+  },
+  {
+    name: 'remove-old-intermw-messages',
+    rule: '0 2 * * *',
+    job: async () => IntermwMessages.purgeOldData(100),
   },
 ];
 

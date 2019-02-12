@@ -13,7 +13,8 @@
     "send-measurement": "babel-node --presets env utils/sendMeasurement",
     "generate-stats": "babel-node --presets env utils/generateStats",
     "test-parsers": "babel-node --presets env tests/testParsers",
-    "noatumcsv2js": "babel-node --presets env utils/data/noatumcsv2js.js"
+    "noatumcsv2js": "babel-node --presets env utils/data/noatumcsv2js.js",
+    "test": "babel-node --presets env tests/test.js"
   },
   "author": "",
   "license": "MIT",

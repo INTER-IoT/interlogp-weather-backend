@@ -92,4 +92,13 @@ IntermwMessages.saveNewMessage = async (body, sentBy, date, stationId, type) => 
   return message;
 };
 
+IntermwMessages.purgeOldData = async (limit) => {
+  const lastMessages = await IntermwMessageModel.find().sort({ date: -1 }).limit(limit);
+  if (lastMessages && lastMessages.length > 0) {
+    const lastDate = lastMessages[lastMessages.length - 1].date;
+    const deleted = await IntermwMessageModel.deleteMany({ date: { $lt: lastDate } });
+    console.log(`Deleted: ${deleted.n} old IntermwMessages`);
+  }
+};
+
 export default IntermwMessages;
