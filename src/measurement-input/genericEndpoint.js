@@ -28,14 +28,14 @@ export default ({
   return async (req, res) => {
     try {
       let measurement = await parser.parse(req.body);
+      console.log(`New ${type} measurement received: station=${measurement.stationId}, date=${measurement.date}`);
       if (!throttleCheck(type, measurement.stationId, throttleTime)) {
-        console.log(`New ${type} measurement received but blocked due to throttle`);
+        console.log('Measurement blocked due to throttle');
         res.send('ok');
         return;
       }
       measurement = await measurementModel.saveNewMeasurement(measurement); // gets populated
       const station = measurement[stationType];
-      console.log(`New ${type} measurement received: station=${station.id}, date=${measurement.date}`);
       const intermwMessage = await IntermwMessages.saveNewMessage(req.body, req.ip, measurement.date, station._id, type); // eslint-disable-line no-underscore-dangle
       pubsub.publish(topics.NEW_INTERMW_MESSAGE_TOPIC, { newIntermwMessage: intermwMessage });
       const publishData = {};
