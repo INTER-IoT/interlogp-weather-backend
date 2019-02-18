@@ -1,7 +1,7 @@
 import rawWeatherMessage from '../src/parsers/examples/rawWeatherMessage';
 import rawEmissionMessage from '../src/parsers/examples/rawEmissionMessage';
 import rawSoundMessage from '../src/parsers/examples/rawSoundMessage';
-import rawNoatumWeatherMessage from '../src/parsers/examples/rawNoathumWeatherMessage';
+import rawNoatumWeatherMessage from '../src/parsers/examples/rawNoatumWeatherMessage';
 
 import {
   weatherParser,

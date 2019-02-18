@@ -20,7 +20,7 @@ const matchItems = [
   },
   {
     typeMatch: ['sosa:Result', 'InterIoT:SEAMS2mod#WindSpeed'],
-    path: ['iiot:hasResultValue'],
+    path: ['iiot:hasResultValue', '@value'],
     key: 'windSpeed',
     p: typeParsers.float,
   },

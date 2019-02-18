@@ -1,0 +1,89 @@
+[
+  {
+      "@graph": [
+          {
+              "@graph": [
+                  {
+                      "@id": "msg:meta/c947ef57-f563-43c5-a2fa-5fd14d02bb7c",
+                      "msg:SenderPlatformId": {
+                          "@id": "http://www.inter-iot.eu/nctv/seams2"
+                      },
+                      "msg:conversationID": "conv1f04835f-1bd8-4139-bc7e-1b867f6e6ffe",
+                      "msg:dateTimeStamp": "2019-02-18T11:55:02.095Z",
+                      "msg:messageID": "msg90d9c320-45a6-42f3-a610-2abd7c7695b5",
+                      "@type": [
+                          "msg:Observation",
+                          "msg:Response",
+                          "msg:meta"
+                      ]
+                  }
+              ],
+              "@id": "msg:metadata"
+          },
+          {
+              "@graph": [
+                  {
+                      "@id": "_:b0",
+                      "http://www.w3.org/2006/time#inPosition": {
+                          "@id": "_:b3"
+                      },
+                      "@type": "http://www.w3.org/2006/time#Instant"
+                  },
+                  {
+                      "@id": "_:b1",
+                      "iiot:hasName": "WSM_S014",
+                      "iiotex:hasLocalId": "http://www.inter-iot.eu/nctv/seams2/WSM_S014",
+                      "@type": [
+                          "InterIoT:SEAMS2mod#Device",
+                          "iiot:IoTDevice",
+                          "sosa:Sensor"
+                      ]
+                  },
+                  {
+                      "@id": "_:b2",
+                      "iiot:hasResultValue": {
+                          "@type": "http://www.w3.org/2001/XMLSchema#float",
+                          "@value": "8.125"
+                      },
+                      "@type": [
+                          "InterIoT:SEAMS2mod#WindSpeed",
+                          "sosa:Result"
+                      ]
+                  },
+                  {
+                      "@id": "_:b3",
+                      "http://www.w3.org/2006/time#nominalPosition": "2019-02-18T11:54:30.000+0000",
+                      "@type": "http://www.w3.org/2006/time#TimePosition"
+                  },
+                  {
+                      "@id": "InterIoT:syntax/SEAMS2#_0",
+                      "InterIoT:SEAMS2mod#hasName": "WSM_S014",
+                      "InterIoT:SEAMS2mod#hasType": "MET",
+                      "InterIoT:SEAMS2mod#hasVersion": "1.0",
+                      "InterIoT:syntax/SEAMS2#hasFamily": "WSM",
+                      "sosa:hasResult": {
+                          "@id": "_:b2"
+                      },
+                      "sosa:madeBySensor": {
+                          "@id": "_:b1"
+                      },
+                      "sosa:phenomenonTime": {
+                          "@id": "_:b0"
+                      },
+                      "@type": "sosa:Observation"
+                  }
+              ],
+              "@id": "msg:payload"
+          }
+      ],
+      "@context": {
+          "msg": "http://inter-iot.eu/message/",
+          "iiotex": "http://inter-iot.eu/GOIoTPex#",
+          "geosparql": "http://www.opengis.net/ont/geosparql#",
+          "iiot": "http://inter-iot.eu/GOIoTP#",
+          "InterIoT": "http://inter-iot.eu/",
+          "ssn": "http://www.w3.org/ns/ssn/",
+          "sosa": "http://www.w3.org/ns/sosa/"
+      }
+  }
+]
