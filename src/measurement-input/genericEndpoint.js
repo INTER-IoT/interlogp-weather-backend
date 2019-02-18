@@ -35,7 +35,7 @@ export default ({
         res.send('ok');
         return;
       }
-      console.log(JSON.stringify(req.body, null ,4));
+      // console.log(JSON.stringify(req.body, null ,4));
       measurement = await measurementModel.saveNewMeasurement(measurement); // gets populated
       const station = measurement[stationType];
       const intermwMessage = await IntermwMessages.saveNewMessage(req.body, req.ip, measurement.date, station._id, type); // eslint-disable-line no-underscore-dangle
