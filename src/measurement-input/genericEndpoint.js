@@ -8,11 +8,11 @@ const throttleCache = {};
 const throttleCheck = (type, stationId, throttleTime) => {
   const lastTimeStamp = throttleCache[type][stationId];
   const now = new Date().getTime();
-  if (lastTimeStamp && (now - lastTimeStamp) < throttleTime) {
-    return false;
+  if (lastTimeStamp) {
+    return (now - lastTimeStamp) - throttleTime;
   }
   throttleCache[type][stationId] = now;
-  return true;
+  return -1;
 };
 
 export default ({
@@ -29,11 +29,13 @@ export default ({
     try {
       let measurement = await parser.parse(req.body);
       console.log(`New ${type} measurement received: station=${measurement.stationId}, date=${measurement.date}`);
-      if (!throttleCheck(type, measurement.stationId, throttleTime)) {
-        console.log('Measurement blocked due to throttle');
+      const diff = throttleCheck(type, measurement.stationId, throttleTime);
+      if (diff < 0) {
+        console.log(`Measurement blocked due to throttle: ${diff}`);
         res.send('ok');
         return;
       }
+      console.log(req.body);
       measurement = await measurementModel.saveNewMeasurement(measurement); // gets populated
       const station = measurement[stationType];
       const intermwMessage = await IntermwMessages.saveNewMessage(req.body, req.ip, measurement.date, station._id, type); // eslint-disable-line no-underscore-dangle
