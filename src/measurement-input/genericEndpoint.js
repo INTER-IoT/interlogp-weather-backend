@@ -12,7 +12,7 @@ const throttleCheck = (type, stationId, throttleTime) => {
     return (now - lastTimeStamp) - throttleTime;
   }
   throttleCache[type][stationId] = now;
-  return -1;
+  return 0;
 };
 
 export default ({
