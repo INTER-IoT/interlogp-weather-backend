@@ -34,7 +34,7 @@
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "body-parser": "^1.15.2",
     "cors": "^2.8.5",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "faker": "^4.1.0",
     "graphql": "^14.1.0",
     "graphql-server-express": "^1.1.2",
